@@ -1,5 +1,3 @@
-package org.softwareanvil
-
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
