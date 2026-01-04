@@ -54,9 +54,9 @@ SELECT
     c.first_name,
     c.last_name,
     c.age,
-    c.country_id,
     c.occupation,
-    c.description
+    c.description,
+    co.name AS country_name
 FROM characters c
 JOIN countries co ON c.country_id = co.id
 WHERE co.name = ?;
