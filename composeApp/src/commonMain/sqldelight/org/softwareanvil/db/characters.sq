@@ -1,0 +1,62 @@
+CREATE TABLE characters (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    age INTEGER,
+    country_id INTEGER,
+    occupation TEXT,
+    description TEXT,
+    created_at INTEGER NOT NULL,
+    FOREIGN KEY(country_id) REFERENCES countries(id)
+);
+
+insert:
+INSERT INTO characters(
+    first_name,
+    last_name,
+    age,
+    country_id,
+    occupation,
+    description,
+    created_at
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectAll:
+SELECT
+    id,
+    first_name,
+    last_name,
+    age,
+    country_id,
+    occupation,
+    description
+FROM characters;
+
+selectById:
+SELECT
+    id,
+    first_name,
+    last_name,
+    age,
+    country_id,
+    occupation,
+    description
+FROM characters
+WHERE id = ?;
+
+deleteById:
+DELETE FROM characters
+WHERE id = ?;
+
+selectByCountryName:
+SELECT
+    c.id,
+    c.first_name,
+    c.last_name,
+    c.age,
+    c.country_id,
+    c.occupation,
+    c.description
+FROM characters c
+JOIN countries co ON c.country_id = co.id
+WHERE co.name = ?;

@@ -2,15 +2,19 @@ CREATE TABLE syllables (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     type TEXT NOT NULL,
     category TEXT NOT NULL,
-    syllabe TEXT NOT NULL,
+    syllable TEXT NOT NULL,
     weight INTEGER NOT NULL DEFAULT 1
 );
 
 selectByType:
-SELECT syllabe, weight
+SELECT id, syllable, weight
 FROM syllables
 WHERE type = ? AND category = 'name';
 
 insert:
-INSERT INTO syllables(type, category, syllabe, weight)
+INSERT INTO syllables(type, category, syllable, weight)
 VALUES (?, ?, ?, ?);
+
+deleteById:
+DELETE FROM syllables
+WHERE id = ?;
