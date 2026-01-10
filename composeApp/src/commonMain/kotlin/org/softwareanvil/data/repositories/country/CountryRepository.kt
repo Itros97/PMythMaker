@@ -1,4 +1,4 @@
-package org.softwareanvil.data.repositories
+package org.softwareanvil.data.repositories.country
 
 import org.softwareanvil.domain.models.Country
 
