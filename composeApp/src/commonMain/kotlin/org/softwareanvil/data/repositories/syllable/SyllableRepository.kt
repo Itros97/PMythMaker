@@ -9,5 +9,7 @@ interface SyllableRepository {
         type: SyllableType,
         category: SyllableCategory
     ): List<Syllable>
+
+    fun isEmpty(): Boolean
 }
 
