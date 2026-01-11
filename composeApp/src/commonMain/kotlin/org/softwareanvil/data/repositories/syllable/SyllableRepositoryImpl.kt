@@ -16,8 +16,4 @@ class SyllableRepositoryImpl(
             .selectByTypeAndCategory(type.dbValue, category.dbValue)
             .executeAsList()
             .map { it.toDomain() }
-
-    override fun isEmpty(): Boolean {
-        TODO("Not yet implemented")
-    }
 }
