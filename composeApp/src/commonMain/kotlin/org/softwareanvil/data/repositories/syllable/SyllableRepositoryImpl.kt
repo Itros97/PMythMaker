@@ -11,9 +11,11 @@ class SyllableRepositoryImpl(
     override fun getByTypeAndCategory(
         type: SyllableType,
         category: SyllableCategory
-    ): List<Syllable> {
-        TODO("Not yet implemented")
-    }
+    ): List<Syllable> =
+        queries
+            .selectByTypeAndCategory(type.dbValue, category.dbValue)
+            .executeAsList()
+            .map { it.toDomain() }
 
     override fun isEmpty(): Boolean {
         TODO("Not yet implemented")
