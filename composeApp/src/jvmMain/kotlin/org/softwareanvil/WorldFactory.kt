@@ -11,12 +11,19 @@ import org.softwareanvil.db.PocketMythDatabase.Companion.Schema
 import org.softwareanvil.db.SyllablesQueries
 import org.softwareanvil.domain.generator.WorldGeneratorService
 import org.softwareanvil.ui.world.WorldViewModel
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
 object WorldFactory {
 
     fun createWorldViewModel(): WorldViewModel {
+
+        val dbFile = File("pocket_mythsmith.db")
+
+        if (dbFile.exists()) {
+            dbFile.delete()
+        }
 
         val driver = JdbcSqliteDriver("jdbc:sqlite:pocket_mythsmith.db")
 
