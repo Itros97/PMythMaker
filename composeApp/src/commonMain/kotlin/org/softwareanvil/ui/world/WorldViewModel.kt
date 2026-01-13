@@ -4,9 +4,9 @@ import GenerateWorldUseCase
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.softwareanvil.domain.generator.WorldGeneratorService
 import org.softwareanvil.domain.models.Country
 
+@Suppress("unused")
 class WorldViewModel(
     private val generateWorldUseCase: GenerateWorldUseCase
 ) : ViewModel() {
