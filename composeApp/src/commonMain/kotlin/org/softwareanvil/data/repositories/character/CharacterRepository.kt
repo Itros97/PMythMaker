@@ -1,4 +1,4 @@
-package org.softwareanvil.data.repositories
+package org.softwareanvil.data.repositories.character
 
 import org.softwareanvil.domain.models.Character
 
