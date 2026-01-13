@@ -7,11 +7,11 @@ class CountryRepositoryImpl(
     private val database: PocketMythDatabase
 ) : CountryRepository {
 
-    override fun insert(name: String, description: String?, created: Long) {
+    override fun insert(name: String, description: String?, foundationYear: String?) {
         database.countriesQueries.insert(
             name = name,
             description = description,
-            created_at = created
+            foundationYear = foundationYear
         )
     }
 

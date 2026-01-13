@@ -33,5 +33,5 @@ class NameGenerator(
     }
 
     private fun pick(list: List<Syllable>): Syllable =
-        weightedRandom(list, { it.weight }, random)
+        weightedRandom(list, { it.weight.toInt() }, random)
 }

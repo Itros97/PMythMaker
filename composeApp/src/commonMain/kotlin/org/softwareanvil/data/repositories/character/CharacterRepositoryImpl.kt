@@ -44,7 +44,7 @@ class CharacterRepositoryImpl(
                     age = row.age?.toInt(),
                     country = row.country_id?.let { cid ->
                         countries[cid]?.let {
-                            Country(it.id, it.name, it.description)
+                            Country(it.id, it.name, it.description, foundationYear = 0)
                         }
                     },
                     occupation = row.occupation,
