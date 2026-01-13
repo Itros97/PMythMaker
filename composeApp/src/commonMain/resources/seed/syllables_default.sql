@@ -32,7 +32,7 @@ INSERT INTO syllables(type, category, syllable, weight) VALUES
 ('suffix', 'country', 'ar', 1),
 ('suffix', 'country', 'um', 1),
 ('suffix', 'country', 'is', 1),
-('suffix', 'country', 'ai', 1);
+('suffix', 'country', 'ai', 1),
 
 -- PERSONS
 ('prefix', 'person', 'el', 2),

@@ -1,6 +1,6 @@
 package org.softwareanvil.ui.world
 
-import GenerateWorldUseCase
+import org.softwareanvil.world.GenerateWorldUseCase
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
