@@ -5,10 +5,6 @@ CREATE TABLE countries (
     foundationYear INTEGER
 );
 
-insert:
-INSERT INTO countries(name, description, foundationYear)
-VALUES (?, ?, ?);
-
 selectAll:
 SELECT id, name, description, foundationYear
 FROM countries
@@ -19,13 +15,17 @@ SELECT id, name, description, foundationYear
 FROM countries
 WHERE id = ?;
 
+insert:
+INSERT INTO countries(name, description, foundationYear)
+VALUES (?, ?, ?);
+
+deleteAll:
+DELETE FROM countries;
+
 updateById:
 UPDATE countries
 SET name = ?, description = ?, foundationYear = ?
 WHERE id = ?;
-
-deleteAll:
-DELETE FROM countries;
 
 deleteById:
 DELETE FROM countries

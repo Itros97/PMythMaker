@@ -6,4 +6,5 @@ interface CountryRepository {
     fun insert(country: Country)
     fun getAll(): List<Country>
     fun getById(id: Long): Country?
+    fun deleteAll()
 }
