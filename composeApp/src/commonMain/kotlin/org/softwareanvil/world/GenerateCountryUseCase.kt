@@ -23,6 +23,10 @@ class GenerateWorldUseCase(
     }
 
     fun deleteOneCountry(country: Country) {
-        countryRepository.delete(country)
+        countryRepository.deleteById(country.id)
+    }
+
+    fun getAllCountries(): List<Country> {
+        return countryRepository.getAll()
     }
 }
