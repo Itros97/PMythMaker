@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.softwareanvil.domain.models.Country
+import kotlin.random.Random
 
 @Suppress("unused")
 class WorldViewModel(
@@ -16,5 +17,19 @@ class WorldViewModel(
 
     fun generateWorld(seed: Long) {
         _countries.value = generateWorldUseCase.execute(seed)
+    }
+
+    fun load() {
+        _countries.value = generateWorldUseCase.getAllCountries()
+    }
+
+    fun generateOne() {
+        generateWorldUseCase.generateOneCountry(Random.nextLong())
+        load()
+    }
+
+    fun delete(country: Country) {
+        generateWorldUseCase.deleteOneCountry(country)
+        load()
     }
 }
