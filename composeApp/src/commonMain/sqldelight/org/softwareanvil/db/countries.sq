@@ -7,8 +7,7 @@ CREATE TABLE countries (
 
 selectAll:
 SELECT id, name, description, foundationYear
-FROM countries
-ORDER BY name;
+FROM countries;
 
 selectById:
 SELECT id, name, description, foundationYear
@@ -19,14 +18,10 @@ insert:
 INSERT INTO countries(name, description, foundationYear)
 VALUES (?, ?, ?);
 
-deleteAll:
-DELETE FROM countries;
-
 updateById:
 UPDATE countries
 SET name = ?, description = ?, foundationYear = ?
 WHERE id = ?;
 
-deleteById:
-DELETE FROM countries
-WHERE id = ?;
+deleteAll:
+DELETE FROM countries;

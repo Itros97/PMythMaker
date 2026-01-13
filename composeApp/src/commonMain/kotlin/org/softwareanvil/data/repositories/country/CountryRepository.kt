@@ -7,4 +7,5 @@ interface CountryRepository {
     fun getAll(): List<Country>
     fun getById(id: Long): Country?
     fun deleteAll()
+    fun updateById(id: Long, country: Country)
 }

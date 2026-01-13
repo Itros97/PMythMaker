@@ -37,7 +37,11 @@ class CountryRepositoryImpl(
         }
 
     override fun deleteAll() {
-        queries.deleteAll()
+        TODO("Not yet implemented")
+    }
+
+    override fun updateById(id: Long, country: Country) {
+        TODO("Not yet implemented")
     }
 
 }
