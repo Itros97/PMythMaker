@@ -8,14 +8,6 @@ class CountryRepositoryImpl(
     private val queries: CountriesQueries
 ) : CountryRepository {
 
-    override fun insert(country: Country) {
-        queries.insert(
-            name = country.name,
-            description = country.description,
-            foundationYear = country.foundationYear?.toLong()
-        )
-    }
-
     override fun getAll(): List<Country> =
         queries.selectAll().executeAsList().map {
             Country(
@@ -36,13 +28,32 @@ class CountryRepositoryImpl(
             )
         }
 
-    override fun deleteAll() {
-        TODO("Not yet implemented")
+    override fun insert(country: Country) {
+        queries.insert(
+            name = country.name,
+            description = country.description,
+            foundationYear = country.foundationYear?.toLong()
+        )
     }
 
     override fun updateById(id: Long, country: Country) {
-        TODO("Not yet implemented")
+        queries.updateById(
+            id = id,
+            name = country.name,
+            description = country.description,
+            foundationYear = country.foundationYear?.toLong()
+        )
     }
+
+    override fun deleteById(id: Long) {
+        queries.deleteById(id)
+    }
+
+    override fun deleteAll() {
+        queries.deleteAll()
+    }
+
+
 
 }
 

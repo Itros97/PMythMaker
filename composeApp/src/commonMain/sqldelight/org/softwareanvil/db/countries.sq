@@ -25,3 +25,7 @@ WHERE id = ?;
 
 deleteAll:
 DELETE FROM countries;
+
+deleteById:
+DELETE FROM countries
+WHERE id = ?;

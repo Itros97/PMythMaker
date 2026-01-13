@@ -10,6 +10,7 @@ class WorldGeneratorService(
     private val syllableRepository: SyllableRepository
 ) {
 
+
     fun generateCountries(seed: Long): List<Country> {
         val worldRandom = Random(seed)
 
@@ -26,4 +27,26 @@ class WorldGeneratorService(
             CountryGenerator(nameGenerator, worldRandom).generate()
         }
     }
+
+    fun generateCountry(seed: Long): Country {
+        val random = Random(seed)
+
+        val syllables =
+            syllableRepository.getByTypeAndCategory(SyllableType.PREFIX, SyllableCategory.COUNTRY) +
+                    syllableRepository.getByTypeAndCategory(SyllableType.CORE, SyllableCategory.COUNTRY) +
+                    syllableRepository.getByTypeAndCategory(SyllableType.SUFFIX, SyllableCategory.COUNTRY)
+
+        val nameGenerator = NameGenerator(
+            syllables = syllables,
+            random = random
+        )
+        val name = nameGenerator.generate(SyllableCategory.COUNTRY)
+
+        return Country(
+            name = name,
+            description = null,
+            foundationYear = random.nextInt(0, 1000)
+        )
+    }
+
 }

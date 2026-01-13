@@ -11,10 +11,18 @@ class GenerateWorldUseCase(
 
     fun execute(seed: Long): List<Country> {
         val countries = worldGenerator.generateCountries(seed)
-
-        //countryRepository.deleteAll()
-
+        countryRepository.deleteAll()
         countries.forEach(countryRepository::insert)
         return countries
+    }
+
+    fun generateOneCountry(seed: Long): Country {
+        val country = worldGenerator.generateCountry(seed)
+        countryRepository.insert(country)
+        return country
+    }
+
+    fun deleteOneCountry(country: Country) {
+        countryRepository.delete(country)
     }
 }
