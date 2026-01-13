@@ -1,0 +1,20 @@
+package org.softwareanvil.ui.world
+
+import GenerateWorldUseCase
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import org.softwareanvil.domain.generator.WorldGeneratorService
+import org.softwareanvil.domain.models.Country
+
+class WorldViewModel(
+    private val generateWorldUseCase: GenerateWorldUseCase
+) : ViewModel() {
+
+    private val _countries = MutableStateFlow<List<Country>>(emptyList())
+    val countries: StateFlow<List<Country>> = _countries
+
+    fun generateWorld(seed: Long) {
+        _countries.value = generateWorldUseCase.execute(seed)
+    }
+}
