@@ -14,27 +14,25 @@ import kotlin.random.Random
 fun WorldScreen(viewModel: WorldViewModel) {
     val countries by viewModel.countries.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Button(
-            onClick = {
-                viewModel.generateWorld(Random.nextLong())
-            }
-        ) {
-            Text("Generar mundo")
+    Column(Modifier.padding(16.dp)) {
+
+        Button(onClick = { viewModel.generateOne() }) {
+            Text("➕ Generar país")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
         countries.forEach { country ->
-            val yearText = country.foundationYear
-                ?.let { "año $it" }
-                ?: "fecha desconocida"
-
-            Text("🌍 ${country.name} ($yearText)")
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("🌍 ${country.name}")
+                Button(onClick = { viewModel.delete(country) }) {
+                    Text("❌")
+                }
+            }
         }
     }
 }
+
