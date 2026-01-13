@@ -32,4 +32,8 @@ class WorldViewModel(
         generateWorldUseCase.deleteOneCountry(country)
         load()
     }
+
+    fun saveAll() {
+        generateWorldUseCase.saveSelectedCountries(_countries.value)
+    }
 }

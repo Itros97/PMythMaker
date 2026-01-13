@@ -29,4 +29,9 @@ class GenerateWorldUseCase(
     fun getAllCountries(): List<Country> {
         return countryRepository.getAll()
     }
+
+    fun saveSelectedCountries(countries: List<Country>) {
+        countryRepository.deleteAll()
+        countries.forEach(countryRepository::insert)
+    }
 }

@@ -20,6 +20,10 @@ fun WorldScreen(viewModel: WorldViewModel) {
             Text("➕ Generar país")
         }
 
+        Button(onClick = { viewModel.saveAll() }) {
+            Text("💾 Guardar")
+        }
+
         Spacer(Modifier.height(16.dp))
 
         countries.forEach { country ->

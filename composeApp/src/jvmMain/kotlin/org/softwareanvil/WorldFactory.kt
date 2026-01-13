@@ -18,8 +18,7 @@ object WorldFactory {
 
     fun createWorldViewModel(): WorldViewModel {
 
-        val driver: SqlDriver =
-            JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        val driver = JdbcSqliteDriver("jdbc:sqlite:pocket_mythsmith.db")
 
         Schema.create(driver)
 
