@@ -1,8 +1,14 @@
 package org.softwareanvil
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import org.softwareanvil.ui.world.WorldScreen
+import androidx.compose.runtime.setValue
+import org.softwareanvil.ui.Screen
+import org.softwareanvil.ui.generator.GeneratorScreen
+import org.softwareanvil.ui.home.HomeScreen
+import org.softwareanvil.ui.library.LibraryScreen
 import org.softwareanvil.ui.world.WorldViewModel
 
 @Composable
@@ -11,6 +17,24 @@ fun App() {
         WorldFactory.createWorldViewModel()
     }
 
-    WorldScreen(viewModel)
+    //WorldScreen(viewModel)
+    var screen by remember { mutableStateOf(Screen.HOME) }
+
+    when (screen) {
+        Screen.HOME -> HomeScreen(
+            onGenerator = { screen = Screen.GENERATOR },
+            onLibrary = { screen = Screen.LIBRARY }
+        )
+
+        Screen.GENERATOR -> GeneratorScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.HOME }
+        )
+
+        Screen.LIBRARY -> LibraryScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.HOME }
+        )
+    }
 }
 
