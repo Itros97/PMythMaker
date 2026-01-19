@@ -24,9 +24,14 @@ fun GeneratorScreen(
 
     Column(Modifier.padding(16.dp)) {
 
+        // 🔝 Barra superior
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = { viewModel.generateOne() }) {
                 Text("➕ Generar país")
+            }
+
+            Button(onClick = { viewModel.saveAll() }) {
+                Text("💾💾 Guardar todos")
             }
 
             Button(onClick = onBack) {
@@ -36,8 +41,27 @@ fun GeneratorScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        countries.forEach {
-            Text("🌍 ${it.name}")
+        // 📋 Lista de países generados
+        countries.forEach { country ->
+            Row(
+                modifier = Modifier.padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "🌍 ${country.name}",
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = "🌍 ${country.foundationYear}",
+                    modifier = Modifier.weight(1f)
+                )
+
+             //   Button(onClick = { viewModel.save(country) }) {
+                    Text("💾")
+                }
+
+             //   Button(onClick = { viewModel.removeFromMemory(country) }) {
+                    Text("❌")
+                }
+            }
         }
-    }
-}

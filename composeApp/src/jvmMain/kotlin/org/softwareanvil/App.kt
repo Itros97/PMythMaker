@@ -9,15 +9,14 @@ import org.softwareanvil.ui.Screen
 import org.softwareanvil.ui.generator.GeneratorScreen
 import org.softwareanvil.ui.home.HomeScreen
 import org.softwareanvil.ui.library.LibraryScreen
-import org.softwareanvil.ui.world.WorldViewModel
+import org.softwareanvil.ui.library.country.CountryDetailScreen
 
 @Composable
 fun App() {
-    val viewModel: WorldViewModel = remember {
+    val viewModel = remember {
         WorldFactory.createWorldViewModel()
     }
 
-    //WorldScreen(viewModel)
     var screen by remember { mutableStateOf(Screen.HOME) }
 
     when (screen) {
@@ -33,7 +32,13 @@ fun App() {
 
         Screen.LIBRARY -> LibraryScreen(
             viewModel = viewModel,
-            onBack = { screen = Screen.HOME }
+            onBack = { screen = Screen.HOME },
+            onEdit = { screen = Screen.COUNTRY_DETAIL }
+        )
+
+        Screen.COUNTRY_DETAIL -> CountryDetailScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.LIBRARY }
         )
     }
 }

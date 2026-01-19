@@ -3,5 +3,6 @@ package org.softwareanvil.ui
 enum class Screen {
     HOME,
     GENERATOR,
-    LIBRARY
+    LIBRARY,
+    COUNTRY_DETAIL
 }

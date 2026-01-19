@@ -36,4 +36,21 @@ class WorldViewModel(
     fun saveAll() {
         generateWorldUseCase.saveSelectedCountries(_countries.value)
     }
+
+    fun editCountry(country: Country) {
+        generateWorldUseCase.editCountry(country)
+        load()
+    }
+
+    private val _selectedCountry = MutableStateFlow<Country?>(null)
+    val selectedCountry: StateFlow<Country?> = _selectedCountry
+
+    fun selectCountry(country: Country) {
+        _selectedCountry.value = country
+    }
+
+    fun clearSelection() {
+        _selectedCountry.value = null
+    }
+
 }

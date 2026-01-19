@@ -21,20 +21,19 @@ import org.softwareanvil.ui.world.WorldViewModel
 @Composable
 fun LibraryScreen(
     viewModel: WorldViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onEdit: () -> Unit
 ) {
     val countries by viewModel.countries.collectAsState()
 
     LaunchedEffect(Unit) {
-        //viewModel.loadSaved()
+     //   viewModel.loadSaved()
     }
 
     Column(Modifier.padding(16.dp)) {
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = onBack) {
-                Text("⬅ Volver")
-            }
+        Button(onClick = onBack) {
+            Text("⬅ Volver")
         }
 
         Spacer(Modifier.height(16.dp))
@@ -46,8 +45,11 @@ fun LibraryScreen(
             ) {
                 Text("🌍 ${country.name}")
 
-                Button(onClick = { viewModel.delete(country) }) {
-                    Text("❌")
+                Button(onClick = {
+                    viewModel.selectCountry(country)
+                    onEdit()
+                }) {
+                    Text("✏️")
                 }
             }
         }

@@ -34,4 +34,8 @@ class GenerateWorldUseCase(
         countryRepository.deleteAll()
         countries.forEach(countryRepository::insert)
     }
+
+    fun editCountry(country: Country) {
+        countryRepository.updateById(country.id, country)
+    }
 }
