@@ -1,4 +1,6 @@
-CREATE TABLE syllables (
+-- package: org.softwareanvil.db
+
+CREATE TABLE IF NOT EXISTS syllables (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     type TEXT NOT NULL,
     category TEXT NOT NULL,

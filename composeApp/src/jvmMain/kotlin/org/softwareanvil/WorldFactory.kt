@@ -19,15 +19,23 @@ object WorldFactory {
 
     fun createWorldViewModel(): WorldViewModel {
 
-        val dbFile = File("pocket_mythsmith.db")
+        val dbPath =
+            "${System.getProperty("user.home")}/.pocket-mythsmith/pocket_mythsmith.db"
 
-        if (dbFile.exists()) {
-            dbFile.delete()
-        }
+        File(dbPath).parentFile.mkdirs()
 
+        println("🟢 Creating driver")
+    //    val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
         val driver = JdbcSqliteDriver("jdbc:sqlite:pocket_mythsmith.db")
 
+
+        // TODO: Remove this line to persist data between runs
+//        if (dbFile.exists()) {
+//            dbFile.delete()
+//        }
+        println("🟡 Calling Schema.create")
         Schema.create(driver)
+
 
         val syllablesQueries = SyllablesQueries(driver)
         val countriesQueries = CountriesQueries(driver)

@@ -1,4 +1,6 @@
-CREATE TABLE characters (
+-- package: org.softwareanvil.db
+
+CREATE TABLE IF NOT EXISTS characters (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,

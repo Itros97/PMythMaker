@@ -33,6 +33,13 @@ class WorldViewModel(
         load()
     }
 
+    fun deleteAll() {
+        _countries.value.forEach { country ->
+            generateWorldUseCase.deleteAll()
+        }
+        load()
+    }
+
     fun saveAll() {
         generateWorldUseCase.saveSelectedCountries(_countries.value)
     }

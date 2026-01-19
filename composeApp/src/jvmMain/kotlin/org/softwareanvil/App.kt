@@ -33,8 +33,10 @@ fun App() {
         Screen.LIBRARY -> LibraryScreen(
             viewModel = viewModel,
             onBack = { screen = Screen.HOME },
-            onEdit = { screen = Screen.COUNTRY_DETAIL }
+            onEdit = { screen = Screen.COUNTRY_DETAIL },
+            refreshKey = screen
         )
+
 
         Screen.COUNTRY_DETAIL -> CountryDetailScreen(
             viewModel = viewModel,
