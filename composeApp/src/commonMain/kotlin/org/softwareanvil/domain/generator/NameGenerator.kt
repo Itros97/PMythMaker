@@ -21,9 +21,13 @@ class NameGenerator(
             "At least one CORE syllable is required for $category"
         }
 
-        val prefix = byType[SyllableType.PREFIX]?.let { pick(it) }
+        val prefix = byType[SyllableType.PREFIX]
+            ?.takeIf { random.nextBoolean() }
+            ?.let { pick(it) }
         val core = pick(coreList)
-        val suffix = byType[SyllableType.SUFFIX]?.let { pick(it) }
+        val suffix = byType[SyllableType.SUFFIX]
+            ?.takeIf { random.nextBoolean() }
+            ?.let { pick(it) }
 
         return buildString {
             prefix?.let { append(it.value) }
@@ -33,5 +37,5 @@ class NameGenerator(
     }
 
     private fun pick(list: List<Syllable>): Syllable =
-        weightedRandom(list, { it.weight }, random)
+        weightedRandom(list, { it.weight.toInt() }, random)
 }

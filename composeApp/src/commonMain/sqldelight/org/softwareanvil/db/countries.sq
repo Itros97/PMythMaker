@@ -2,22 +2,21 @@ CREATE TABLE countries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-    foundationYear TEXT
+    foundationYear INTEGER
 );
-
-insert:
-INSERT INTO countries(name, description, foundationYear)
-VALUES (?, ?, ?);
 
 selectAll:
 SELECT id, name, description, foundationYear
-FROM countries
-ORDER BY name;
+FROM countries;
 
 selectById:
 SELECT id, name, description, foundationYear
 FROM countries
 WHERE id = ?;
+
+insert:
+INSERT INTO countries(name, description, foundationYear)
+VALUES (?, ?, ?);
 
 updateById:
 UPDATE countries

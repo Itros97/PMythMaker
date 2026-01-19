@@ -8,5 +8,5 @@ data class Syllable(
     val type: SyllableType,
     val category: SyllableCategory,
     val value: String,
-    val weight: Int
+    val weight: Long
 )
