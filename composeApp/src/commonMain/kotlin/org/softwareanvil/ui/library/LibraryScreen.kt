@@ -22,8 +22,7 @@ import org.softwareanvil.ui.world.WorldViewModel
 fun LibraryScreen(
     viewModel: WorldViewModel,
     onBack: () -> Unit,
-    onEdit: () -> Unit,
-    refreshKey: Any
+    onEdit: () -> Unit
 ) {
     val countries by viewModel.countries.collectAsState()
 

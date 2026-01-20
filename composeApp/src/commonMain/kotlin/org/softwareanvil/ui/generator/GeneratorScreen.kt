@@ -1,18 +1,14 @@
 package org.softwareanvil.ui.generator
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.softwareanvil.domain.models.Country
 import org.softwareanvil.ui.world.WorldViewModel
 
 @Composable
@@ -21,47 +17,120 @@ fun GeneratorScreen(
     onBack: () -> Unit
 ) {
     val countries by viewModel.countries.collectAsState()
+    val currentCountry: Country? = countries.lastOrNull()
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-        // 🔝 Barra superior
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { viewModel.generateOne() }) {
-                Text("➕ Generar país")
-            }
-
-            Button(onClick = { viewModel.saveAll() }) {
-                Text("💾💾 Guardar todos")
-            }
-
-            Button(onClick = onBack) {
-                Text("⬅ Volver")
-            }
+        // ⬅ Volver
+        Button(
+            onClick = onBack,
+            modifier = Modifier.align(Alignment.Start)
+        ) {
+            Text("⬅ Volver")
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(32.dp))
 
-        // 📋 Lista de países generados
-        countries.forEach { country ->
-            Row(
-                modifier = Modifier.padding(vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // 🎴 Card principal
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(6.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Text(
-                    text = "🌍 ${country.name}",
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = "🌍 ${country.foundationYear}",
-                    modifier = Modifier.weight(1f)
+                    text = "🌍 Generador de Países",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
                 )
 
-             //   Button(onClick = { viewModel.save(country) }) {
-                    Text("💾")
+                Spacer(Modifier.height(24.dp))
+
+                if (currentCountry == null) {
+                    Text(
+                        text = "Aún no se ha generado ningún país",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                } else {
+
+                    // 🌍 Nombre
+                    Text(
+                        text = currentCountry.name,
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.ExtraBold,
+                        textAlign = TextAlign.Center
+                    )
+
+                    // ⏳ Año de fundación
+                    currentCountry.foundationYear?.let { year ->
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = "Año de fundación: $year",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    // 📜 Descripción
+                    currentCountry.description?.let { description ->
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
-             //   Button(onClick = { viewModel.removeFromMemory(country) }) {
-                    Text("❌")
+                Spacer(Modifier.height(32.dp))
+
+                // 🔁 Generar
+                Button(
+                    onClick = { viewModel.generateOne() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("🔁 Generar nuevo país")
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                // 💾 Guardar / 🗑️ Borrar
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            currentCountry?.let { viewModel.saveAll() }
+                        },
+                        enabled = currentCountry != null,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("💾 Guardar")
+                    }
+
+                    OutlinedButton(
+                        onClick = {
+                            currentCountry?.let { viewModel.delete(it) }
+                        },
+                        enabled = currentCountry != null,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("🗑️ Borrar")
+                    }
                 }
             }
         }
+    }
+}

@@ -19,6 +19,11 @@ class WorldViewModel(
         _countries.value = generateWorldUseCase.execute(seed)
     }
 
+    init {
+        load()
+    }
+
+
     fun load() {
         _countries.value = generateWorldUseCase.getAllCountries()
     }
@@ -42,6 +47,11 @@ class WorldViewModel(
 
     fun saveAll() {
         generateWorldUseCase.saveSelectedCountries(_countries.value)
+    }
+
+    fun saveCountry(country: Country) {
+        generateWorldUseCase.saveSelectedCountries(listOf(country))
+        load()
     }
 
     fun editCountry(country: Country) {
