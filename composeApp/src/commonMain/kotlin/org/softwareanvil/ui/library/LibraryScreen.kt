@@ -27,7 +27,7 @@ fun LibraryScreen(
     val countries by viewModel.countries.collectAsState()
 
     LaunchedEffect(Unit) {
-     //   viewModel.loadSaved()
+        viewModel.load()
     }
 
     Column(Modifier.padding(16.dp)) {
@@ -36,20 +36,31 @@ fun LibraryScreen(
             Text("⬅ Volver")
         }
 
+        Button(
+            onClick = { viewModel.deleteAll() },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("🗑️ Borrar todos los países")
+        }
+
         Spacer(Modifier.height(16.dp))
 
-        countries.forEach { country: Country ->
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("🌍 ${country.name}")
+        if (countries.isEmpty()) {
+            Text("📭 No hay países guardados")
+        } else {
+            countries.forEach { country: Country ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("🌍 ${country.name}")
 
-                Button(onClick = {
-                    viewModel.selectCountry(country)
-                    onEdit()
-                }) {
-                    Text("✏️")
+                    Button(onClick = {
+                        viewModel.selectCountry(country)
+                        onEdit()
+                    }) {
+                        Text("✏️")
+                    }
                 }
             }
         }
