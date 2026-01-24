@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlin.random.Random
 
 @Composable
 fun WorldScreen(viewModel: WorldViewModel) {
@@ -20,7 +19,7 @@ fun WorldScreen(viewModel: WorldViewModel) {
             Text("➕ Generar país")
         }
 
-        Button(onClick = { viewModel.saveAll() }) {
+        Button(onClick = { viewModel.saveGenerated() }) {
             Text("💾 Guardar")
         }
 

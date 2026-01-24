@@ -2,7 +2,9 @@ package org.softwareanvil.ui.generator
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -16,8 +18,10 @@ fun GeneratorScreen(
     viewModel: WorldViewModel,
     onBack: () -> Unit
 ) {
-    val countries by viewModel.countries.collectAsState()
-    val currentCountry: Country? = countries.lastOrNull()
+    val currentCountry: Country? by viewModel
+        .generatedCountry
+        .collectAsState(initial = null)
+
 
     Column(
         modifier = Modifier
@@ -26,7 +30,6 @@ fun GeneratorScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ⬅ Volver
         Button(
             onClick = onBack,
             modifier = Modifier.align(Alignment.Start)
@@ -36,7 +39,6 @@ fun GeneratorScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        // 🎴 Card principal
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(6.dp)
@@ -62,16 +64,14 @@ fun GeneratorScreen(
                     )
                 } else {
 
-                    // 🌍 Nombre
                     Text(
-                        text = currentCountry.name,
+                        text = currentCountry!!.name,
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.ExtraBold,
                         textAlign = TextAlign.Center
                     )
 
-                    // ⏳ Año de fundación
-                    currentCountry.foundationYear?.let { year ->
+                    currentCountry!!.foundationYear?.let { year ->
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = "Año de fundación: $year",
@@ -84,7 +84,7 @@ fun GeneratorScreen(
                     Spacer(Modifier.height(12.dp))
 
                     // 📜 Descripción
-                    currentCountry.description?.let { description ->
+                    currentCountry!!.description?.let { description ->
                         Text(
                             text = description,
                             style = MaterialTheme.typography.bodyMedium,
@@ -105,15 +105,13 @@ fun GeneratorScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                // 💾 Guardar / 🗑️ Borrar
+                // 💾 Guardar / 🗑️ Descartar
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = {
-                            currentCountry?.let { viewModel.saveAll() }
-                        },
+                        onClick = { viewModel.saveGenerated() },
                         enabled = currentCountry != null,
                         modifier = Modifier.weight(1f)
                     ) {
@@ -121,13 +119,11 @@ fun GeneratorScreen(
                     }
 
                     OutlinedButton(
-                        onClick = {
-                            currentCountry?.let { viewModel.delete(it) }
-                        },
+                        onClick = { viewModel.discardGenerated() },
                         enabled = currentCountry != null,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("🗑️ Borrar")
+                        Text("🗑️ Descartar")
                     }
                 }
             }

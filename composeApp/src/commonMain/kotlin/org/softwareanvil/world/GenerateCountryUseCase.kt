@@ -9,37 +9,31 @@ class GenerateWorldUseCase(
     private val countryRepository: CountryRepository
 ) {
 
-    fun execute(seed: Long): List<Country> {
-        val countries = worldGenerator.generateCountries(seed)
-        countryRepository.deleteAll()
-        countries.forEach(countryRepository::insert)
-        return countries
-    }
-
     fun generateOneCountry(seed: Long): Country {
-        val country = worldGenerator.generateCountry(seed)
-        countryRepository.insert(country)
-        return country
+        return worldGenerator.generateCountry(seed)
     }
 
-    fun deleteOneCountry(country: Country) {
+    fun generateCountries(seed: Long): List<Country> {
+        return worldGenerator.generateCountries(seed)
+    }
+
+    fun saveCountry(country: Country) {
+        countryRepository.insert(country)
+    }
+
+    fun updateCountry(country: Country) {
+        countryRepository.updateById(country.id, country)
+    }
+
+    fun deleteCountry(country: Country) {
         countryRepository.deleteById(country.id)
+    }
+
+    fun deleteAllCountries() {
+        countryRepository.deleteAll()
     }
 
     fun getAllCountries(): List<Country> {
         return countryRepository.getAll()
-    }
-
-    fun saveSelectedCountries(countries: List<Country>) {
-        countryRepository.deleteAll()
-        countries.forEach(countryRepository::insert)
-    }
-
-    fun editCountry(country: Country) {
-        countryRepository.updateById(country.id, country)
-    }
-
-    fun deleteAll() {
-        countryRepository.deleteAll()
     }
 }

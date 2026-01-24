@@ -10,43 +10,38 @@ class WorldGeneratorService(
     private val syllableRepository: SyllableRepository
 ) {
 
-
-    fun generateCountries(seed: Long): List<Country> {
-        val worldRandom = Random(seed)
-
-        val countryCount = worldRandom.nextInt(3, 9) // densidad del mundo
-
+    private fun buildNameGenerator(random: Random): NameGenerator {
         val syllables =
             syllableRepository.getByTypeAndCategory(SyllableType.PREFIX, SyllableCategory.COUNTRY) +
                     syllableRepository.getByTypeAndCategory(SyllableType.CORE, SyllableCategory.COUNTRY) +
                     syllableRepository.getByTypeAndCategory(SyllableType.SUFFIX, SyllableCategory.COUNTRY)
 
-        val nameGenerator = NameGenerator(syllables, worldRandom)
-
-        return (0 until countryCount).map {
-            CountryGenerator(nameGenerator, worldRandom).generate()
-        }
+        return NameGenerator(
+            syllables = syllables,
+            random = random
+        )
     }
 
     fun generateCountry(seed: Long): Country {
         val random = Random(seed)
+        val nameGenerator = buildNameGenerator(random)
 
-        val syllables =
-            syllableRepository.getByTypeAndCategory(SyllableType.PREFIX, SyllableCategory.COUNTRY) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.CORE, SyllableCategory.COUNTRY) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.SUFFIX, SyllableCategory.COUNTRY)
-
-        val nameGenerator = NameGenerator(
-            syllables = syllables,
+        return CountryGenerator(
+            nameGenerator = nameGenerator,
             random = random
-        )
-        val name = nameGenerator.generate(SyllableCategory.COUNTRY)
-
-        return Country(
-            name = name,
-            description = null,
-            foundationYear = random.nextInt(0, 1000)
-        )
+        ).generate()
     }
 
+    fun generateCountries(seed: Long): List<Country> {
+        val random = Random(seed)
+        val nameGenerator = buildNameGenerator(random)
+        val count = random.nextInt(3, 9)
+
+        val generator = CountryGenerator(
+            nameGenerator = nameGenerator,
+            random = random
+        )
+
+        return List(count) { generator.generate() }
+    }
 }
