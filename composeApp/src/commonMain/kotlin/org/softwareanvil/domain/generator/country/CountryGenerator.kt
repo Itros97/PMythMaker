@@ -1,5 +1,6 @@
-package org.softwareanvil.domain.generator
+package org.softwareanvil.domain.generator.country
 
+import org.softwareanvil.domain.generator.name.NameGenerator
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.domain.models.enums.SyllableCategory
 import kotlin.random.Random
@@ -23,4 +24,3 @@ class CountryGenerator(
         )
     }
 }
-

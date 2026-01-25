@@ -12,17 +12,6 @@ CREATE TABLE IF NOT EXISTS characters (
     FOREIGN KEY(country_id) REFERENCES countries(id)
 );
 
-insert:
-INSERT INTO characters(
-    first_name,
-    last_name,
-    age,
-    country_id,
-    occupation,
-    description,
-    created_at
-) VALUES (?, ?, ?, ?, ?, ?, ?);
-
 selectAll:
 SELECT
     id,
@@ -48,10 +37,6 @@ SELECT
 FROM characters
 WHERE id = ?;
 
-deleteById:
-DELETE FROM characters
-WHERE id = ?;
-
 selectByCountryName:
 SELECT
     c.id,
@@ -67,3 +52,32 @@ SELECT
 FROM characters c
 LEFT JOIN countries co ON c.country_id = co.id
 WHERE co.name = ?;
+
+insert:
+INSERT INTO characters(
+    first_name,
+    last_name,
+    age,
+    country_id,
+    occupation,
+    description,
+    created_at
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+updateById:
+UPDATE characters
+SET
+    first_name = ?,
+    last_name = ?,
+    age = ?,
+    country_id = ?,
+    occupation = ?,
+    description = ?,
+    created_at = ?
+WHERE id = ?;
+
+deleteById:
+DELETE FROM characters
+WHERE id = ?;
+
+

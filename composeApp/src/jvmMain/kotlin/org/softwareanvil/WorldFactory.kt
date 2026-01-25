@@ -1,7 +1,5 @@
 package org.softwareanvil
 
-import org.softwareanvil.world.GenerateWorldUseCase
-import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.softwareanvil.data.repositories.country.CountryRepositoryImpl
 import org.softwareanvil.data.repositories.syllable.SyllableRepositoryImpl
@@ -9,8 +7,9 @@ import org.softwareanvil.data.seed.SyllableSeedInitializer
 import org.softwareanvil.db.CountriesQueries
 import org.softwareanvil.db.PocketMythDatabase.Companion.Schema
 import org.softwareanvil.db.SyllablesQueries
-import org.softwareanvil.domain.generator.WorldGeneratorService
+import org.softwareanvil.domain.generator.world.WorldGeneratorService
 import org.softwareanvil.ui.world.WorldViewModel
+import org.softwareanvil.world.GenerateWorldUseCase
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -25,7 +24,7 @@ object WorldFactory {
         File(dbPath).parentFile.mkdirs()
 
         println("🟢 Creating driver")
-    //    val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
+        //    val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
         val driver = JdbcSqliteDriver("jdbc:sqlite:pocket_mythsmith.db")
 
 

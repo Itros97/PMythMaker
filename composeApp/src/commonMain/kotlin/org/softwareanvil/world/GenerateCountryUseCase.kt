@@ -1,7 +1,7 @@
 package org.softwareanvil.world
 
 import org.softwareanvil.data.repositories.country.CountryRepository
-import org.softwareanvil.domain.generator.WorldGeneratorService
+import org.softwareanvil.domain.generator.world.WorldGeneratorService
 import org.softwareanvil.domain.models.Country
 
 class GenerateWorldUseCase(

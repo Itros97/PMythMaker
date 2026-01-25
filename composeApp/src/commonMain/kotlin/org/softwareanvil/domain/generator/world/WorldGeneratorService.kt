@@ -1,6 +1,8 @@
-package org.softwareanvil.domain.generator
+package org.softwareanvil.domain.generator.world
 
 import org.softwareanvil.data.repositories.syllable.SyllableRepository
+import org.softwareanvil.domain.generator.country.CountryGenerator
+import org.softwareanvil.domain.generator.name.NameGenerator
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.domain.models.enums.SyllableCategory
 import org.softwareanvil.domain.models.enums.SyllableType
