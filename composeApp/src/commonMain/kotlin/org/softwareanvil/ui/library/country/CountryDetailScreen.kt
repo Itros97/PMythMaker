@@ -23,13 +23,14 @@ fun CountryDetailScreen(
     var name by remember(country) {
         mutableStateOf(country.name)
     }
-
     var description by remember(country) {
         mutableStateOf(country.description ?: "")
     }
-
     var foundationYear by remember(country) {
         mutableStateOf(country.foundationYear?.toString() ?: "")
+    }
+    var motto by remember(country) {
+        mutableStateOf(country.motto ?: "")
     }
 
     Column(
@@ -79,6 +80,16 @@ fun CountryDetailScreen(
                 Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
+                    value = motto,
+                    onValueChange = { motto = it },
+                    label = { Text("Lema") },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("Ej. «Unidad, Honor y Tierra»") }
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Descripción") },
@@ -104,10 +115,11 @@ fun CountryDetailScreen(
                     Button(
                         onClick = {
                             viewModel.editCountry(
-                                country!!.copy(
+                                country.copy(
                                     name = name.trim(),
                                     description = description.ifBlank { null },
-                                    foundationYear = foundationYear.toIntOrNull()
+                                    foundationYear = foundationYear.toIntOrNull(),
+                                    motto = motto.ifBlank { null }
                                 )
                             )
                             onBack()

@@ -4,25 +4,26 @@ CREATE TABLE IF NOT EXISTS countries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-    foundationYear INTEGER
+    foundationYear INTEGER,
+    motto TEXT
 );
 
 selectAll:
-SELECT id, name, description, foundationYear
+SELECT id, name, description, foundationYear, motto
 FROM countries;
 
 selectById:
-SELECT id, name, description, foundationYear
+SELECT id, name, description, foundationYear, motto
 FROM countries
 WHERE id = ?;
 
 insert:
-INSERT INTO countries(name, description, foundationYear)
-VALUES (?, ?, ?);
+INSERT INTO countries(name, description, foundationYear, motto)
+VALUES (?, ?, ?, ?);
 
 updateById:
 UPDATE countries
-SET name = ?, description = ?, foundationYear = ?
+SET name = ?, description = ?, foundationYear = ?, motto = ?
 WHERE id = ?;
 
 deleteAll:

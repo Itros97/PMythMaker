@@ -1,8 +1,8 @@
 package org.softwareanvil.domain.generator
 
-import kotlin.random.Random
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.domain.models.enums.SyllableCategory
+import kotlin.random.Random
 
 class CountryGenerator(
     private val nameGenerator: NameGenerator,
@@ -17,7 +17,8 @@ class CountryGenerator(
             id = 0L,
             name = name,
             description = "Un país fundado en el año $foundationYear.",
-            foundationYear = foundationYear
+            foundationYear = foundationYear,
+            motto = "¡Viva $name!"
 
         )
     }
