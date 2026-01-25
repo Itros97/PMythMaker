@@ -11,7 +11,7 @@ class CountryGenerator(
     fun generate(): Country =
         Country(
             name = countryName,
-            description = null,
+            description = "La maravillosa nación de $countryName.",
             foundationYear = random.nextInt(0, 2000),
             motto = "¡$countryName al poder!"
         )
