@@ -7,6 +7,7 @@ import org.softwareanvil.data.seed.SyllableSeedInitializer
 import org.softwareanvil.db.CountriesQueries
 import org.softwareanvil.db.PocketMythDatabase.Companion.Schema
 import org.softwareanvil.db.SyllablesQueries
+import org.softwareanvil.domain.generator.name.NameGenerationService
 import org.softwareanvil.domain.generator.world.WorldGeneratorService
 import org.softwareanvil.ui.world.WorldViewModel
 import org.softwareanvil.world.GenerateWorldUseCase
@@ -54,11 +55,18 @@ object WorldFactory {
         val countryRepository =
             CountryRepositoryImpl(countriesQueries)
 
-        val worldGenerator =
-            WorldGeneratorService(syllableRepository)
+        val nameGenerationService =
+            NameGenerationService(syllableRepository)
+
+        val worldGeneratorService =
+            WorldGeneratorService(nameGenerationService)
 
         val generateWorldUseCase =
-            GenerateWorldUseCase(worldGenerator, countryRepository)
+            GenerateWorldUseCase(
+                worldGenerator = worldGeneratorService,
+                countryRepository = countryRepository
+            )
+
 
         return WorldViewModel(generateWorldUseCase)
     }

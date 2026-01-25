@@ -1,49 +1,61 @@
 package org.softwareanvil.domain.generator.world
 
-import org.softwareanvil.data.repositories.syllable.SyllableRepository
+import org.softwareanvil.domain.generator.character.CharacterGenerator
 import org.softwareanvil.domain.generator.country.CountryGenerator
-import org.softwareanvil.domain.generator.name.NameGenerator
+import org.softwareanvil.domain.generator.name.NameGenerationService
+import org.softwareanvil.domain.models.Character
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.domain.models.enums.SyllableCategory
-import org.softwareanvil.domain.models.enums.SyllableType
 import kotlin.random.Random
 
 class WorldGeneratorService(
-    private val syllableRepository: SyllableRepository
+    private val nameGenerationService: NameGenerationService
 ) {
-
-    private fun buildNameGenerator(random: Random): NameGenerator {
-        val syllables =
-            syllableRepository.getByTypeAndCategory(SyllableType.PREFIX, SyllableCategory.COUNTRY) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.CORE, SyllableCategory.COUNTRY) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.SUFFIX, SyllableCategory.COUNTRY)
-
-        return NameGenerator(
-            syllables = syllables,
-            random = random
-        )
-    }
 
     fun generateCountry(seed: Long): Country {
         val random = Random(seed)
-        val nameGenerator = buildNameGenerator(random)
+
+        val name = nameGenerationService.generateName(
+            category = SyllableCategory.COUNTRY,
+            seed = random.nextLong()
+        )
 
         return CountryGenerator(
-            nameGenerator = nameGenerator,
+            countryName = name,
             random = random
         ).generate()
     }
 
     fun generateCountries(seed: Long): List<Country> {
         val random = Random(seed)
-        val nameGenerator = buildNameGenerator(random)
         val count = random.nextInt(3, 9)
 
-        val generator = CountryGenerator(
-            nameGenerator = nameGenerator,
-            random = random
+        return List(count) {
+            generateCountry(random.nextLong())
+        }
+    }
+
+    fun generateCharacter(
+        seed: Long,
+        country: Country?
+    ): Character {
+        val random = Random(seed)
+
+        val firstName = nameGenerationService.generateName(
+            category = SyllableCategory.PERSON,
+            seed = random.nextLong()
         )
 
-        return List(count) { generator.generate() }
+        val lastName = nameGenerationService.generateName(
+            category = SyllableCategory.PERSON,
+            seed = random.nextLong()
+        )
+
+        return CharacterGenerator(
+            firstName = firstName,
+            lastName = lastName,
+            country = country,
+            random = random
+        ).generate()
     }
 }
