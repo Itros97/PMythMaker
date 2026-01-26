@@ -1,62 +1,54 @@
 package org.softwareanvil.ui.home
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
-    onGenerator: () -> Unit,
+    onGenerate: () -> Unit,
     onLibrary: () -> Unit
 ) {
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(32.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Text(
+            text = "Pocket Mythsmith",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        Button(
+            onClick = onGenerate,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            HomeCell(
-                text = "🌍\nGenerar países",
-                modifier = Modifier.weight(1f),
-                onClick = onGenerator
-            )
-            HomeCell(
-                text = "📚\nBiblioteca",
-                modifier = Modifier.weight(1f),
-                onClick = onLibrary
-            )
+            Text("✨ Generar")
         }
 
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        OutlinedButton(
+            onClick = onLibrary,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            HomeCell(
-                text = "⬜\nPróximamente",
-                modifier = Modifier.weight(1f),
-                onClick = {}
-            )
-            HomeCell(
-                text = "⬜\nPróximamente",
-                modifier = Modifier.weight(1f),
-                onClick = {}
-            )
+            Text("📚 Biblioteca")
         }
     }
 }
+
 
 @Composable
 fun HomeCell(text: String, modifier: Modifier, onClick: () -> Unit) {
