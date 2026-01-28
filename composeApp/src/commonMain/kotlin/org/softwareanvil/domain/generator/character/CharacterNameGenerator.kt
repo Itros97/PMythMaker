@@ -1,4 +1,4 @@
-package org.softwareanvil.ui.generator
+package org.softwareanvil.domain.generator.character
 
 import org.softwareanvil.domain.generator.name.NameGenerationService
 import org.softwareanvil.domain.models.enums.SyllableCategory

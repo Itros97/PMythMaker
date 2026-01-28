@@ -2,12 +2,13 @@ package org.softwareanvil
 
 import androidx.compose.runtime.*
 import org.softwareanvil.ui.Screen
+import org.softwareanvil.ui.generator.CharacterGeneratorScreen
 import org.softwareanvil.ui.generator.GenerateMenuScreen
 import org.softwareanvil.ui.generator.GeneratorScreen
 import org.softwareanvil.ui.home.HomeScreen
 import org.softwareanvil.ui.library.LibraryScreen
 import org.softwareanvil.ui.library.country.CountryDetailScreen
-import org.softwareanvil.ui.placeholder.ComingSoonScreen
+
 
 @Composable
 fun App() {
@@ -36,8 +37,8 @@ fun App() {
         )
 
         Screen.GENERATE_CHARACTERS -> {
-            ComingSoonScreen(
-                title = "Generador de personajes",
+            CharacterGeneratorScreen(
+                viewModel = viewModel,
                 onBack = { screen = Screen.GENERATE_MENU }
             )
         }

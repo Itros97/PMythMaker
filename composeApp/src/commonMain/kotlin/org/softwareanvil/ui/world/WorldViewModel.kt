@@ -23,6 +23,8 @@ class WorldViewModel(
 
     private val _generatedCharacter = MutableStateFlow<Character?>(null)
     val generatedCharacter: StateFlow<Character?> = _generatedCharacter
+    private val _selectedCharacter = MutableStateFlow<Character?>(null)
+    val selectedCharacter: StateFlow<Character?> = _selectedCharacter
 
     /* ───────────────────────────────
      * INITIALIZATION, TO LOAD DATA ON START
@@ -104,4 +106,19 @@ class WorldViewModel(
     fun discardGeneratedCharacter() {
         _generatedCharacter.value = null
     }
+
+    fun selectCharacter(character: Character) {
+        _selectedCharacter.value = character
+    }
+
+    fun clearSelectedCharacter() {
+        _selectedCharacter.value = null
+    }
+
+    fun deleteCharacter(character: Character) {
+        generateWorldUseCase.deleteCharacter(character)
+        // loadCharacters()
+    }
+
+
 }

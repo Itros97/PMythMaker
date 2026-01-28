@@ -57,4 +57,5 @@ class GenerateWorldUseCase(
     fun deleteCharacter(character: Character) {
         characterRepository.deleteById(character.id)
     }
+
 }
