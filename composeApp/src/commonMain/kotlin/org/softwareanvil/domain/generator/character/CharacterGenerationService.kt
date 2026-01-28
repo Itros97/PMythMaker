@@ -33,5 +33,4 @@ class CharacterGenerationService(
             random = random
         ).generate()
     }
-    
 }

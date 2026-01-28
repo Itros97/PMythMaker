@@ -1,9 +1,11 @@
 package org.softwareanvil
 
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import org.softwareanvil.data.repositories.character.CharacterRepositoryImpl
 import org.softwareanvil.data.repositories.country.CountryRepositoryImpl
 import org.softwareanvil.data.repositories.syllable.SyllableRepositoryImpl
 import org.softwareanvil.data.seed.SyllableSeedInitializer
+import org.softwareanvil.db.CharactersQueries
 import org.softwareanvil.db.CountriesQueries
 import org.softwareanvil.db.PocketMythDatabase.Companion.Schema
 import org.softwareanvil.db.SyllablesQueries
@@ -39,6 +41,7 @@ object WorldFactory {
 
         val syllablesQueries = SyllablesQueries(driver)
         val countriesQueries = CountriesQueries(driver)
+        val charactersQueries = CharactersQueries(driver)
 
         val syllablesSeedSql = Files.readString(
             Paths.get("src/commonMain/resources/seed/syllables_default.sql")
@@ -61,10 +64,14 @@ object WorldFactory {
         val worldGeneratorService =
             WorldGeneratorService(nameGenerationService)
 
+        val characterRepository =
+            CharacterRepositoryImpl(charactersQueries)
+
         val generateWorldUseCase =
             GenerateWorldUseCase(
                 worldGenerator = worldGeneratorService,
-                countryRepository = countryRepository
+                countryRepository = countryRepository,
+                characterRepository = characterRepository
             )
 
 

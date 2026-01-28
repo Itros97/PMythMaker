@@ -26,19 +26,7 @@ class WorldGeneratorService(
         ).generate()
     }
 
-    fun generateCountries(seed: Long): List<Country> {
-        val random = Random(seed)
-        val count = random.nextInt(3, 9)
-
-        return List(count) {
-            generateCountry(random.nextLong())
-        }
-    }
-
-    fun generateCharacter(
-        seed: Long,
-        country: Country?
-    ): Character {
+    fun generateCharacter(seed: Long, country: Country?): Character {
         val random = Random(seed)
 
         val firstName = nameGenerationService.generateName(
@@ -58,4 +46,6 @@ class WorldGeneratorService(
             random = random
         ).generate()
     }
+
+
 }
