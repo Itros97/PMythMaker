@@ -3,6 +3,7 @@ package org.softwareanvil.ui.world
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.softwareanvil.domain.models.Character
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.world.GenerateWorldUseCase
 import kotlin.random.Random
@@ -20,32 +21,43 @@ class WorldViewModel(
     private val _selectedCountry = MutableStateFlow<Country?>(null)
     val selectedCountry: StateFlow<Country?> = _selectedCountry
 
+    private val _generatedCharacter = MutableStateFlow<Character?>(null)
+    val generatedCharacter: StateFlow<Character?> = _generatedCharacter
+
+    /* ───────────────────────────────
+     * INITIALIZATION, TO LOAD DATA ON START
+     * ─────────────────────────────── */
+
     init {
         load()
     }
 
     /* ───────────────────────────────
-     * LOAD DATA AND USED TO REFRESH
+     * LOAD TO REFRESH DATA
      * ─────────────────────────────── */
+
     fun load() {
         _countries.value = generateWorldUseCase.getAllCountries()
     }
 
+    /* ───────────────────────────────
+     * COUNTRY ACTIONS
+     * ─────────────────────────────── */
 
-    fun generateOne() {
+    fun generateCountry() {
         _generatedCountry.value =
             generateWorldUseCase.generateOneCountry(Random.nextLong())
     }
 
-    fun discardGenerated() {
-        _generatedCountry.value = null
-    }
-
-    fun saveGenerated() {
+    fun saveGeneratedCountry() {
         val country = _generatedCountry.value ?: return
         generateWorldUseCase.saveCountry(country)
         _generatedCountry.value = null
         load()
+    }
+
+    fun discardGeneratedCountry() {
+        _generatedCountry.value = null
     }
 
     fun editCountry(country: Country) {
@@ -53,12 +65,12 @@ class WorldViewModel(
         load()
     }
 
-    fun delete(country: Country) {
+    fun deleteCountry(country: Country) {
         generateWorldUseCase.deleteCountry(country)
         load()
     }
 
-    fun deleteAll() {
+    fun deleteAllCountries() {
         generateWorldUseCase.deleteAllCountries()
         load()
     }
@@ -69,5 +81,27 @@ class WorldViewModel(
 
     fun clearSelection() {
         _selectedCountry.value = null
+    }
+
+    /* ───────────────────────────────
+     * CHARACTER
+     * ─────────────────────────────── */
+
+    fun generateCharacter() {
+        _generatedCharacter.value =
+            generateWorldUseCase.generateCharacter(
+                seed = Random.nextLong(),
+                country = null
+            )
+    }
+
+    fun saveGeneratedCharacter() {
+        val character = _generatedCharacter.value ?: return
+        generateWorldUseCase.saveCharacter(character)
+        _generatedCharacter.value = null
+    }
+
+    fun discardGeneratedCharacter() {
+        _generatedCharacter.value = null
     }
 }

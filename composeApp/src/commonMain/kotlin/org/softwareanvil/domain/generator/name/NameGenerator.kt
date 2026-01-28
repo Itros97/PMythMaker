@@ -1,10 +1,10 @@
-package org.softwareanvil.domain.generator
+package org.softwareanvil.domain.generator.name
 
 import org.softwareanvil.domain.generator.utils.weightedRandom
-import kotlin.random.Random
 import org.softwareanvil.domain.models.Syllable
 import org.softwareanvil.domain.models.enums.SyllableCategory
 import org.softwareanvil.domain.models.enums.SyllableType
+import kotlin.random.Random
 
 class NameGenerator(
     private val syllables: List<Syllable>,

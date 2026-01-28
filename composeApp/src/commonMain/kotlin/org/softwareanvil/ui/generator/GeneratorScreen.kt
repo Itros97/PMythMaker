@@ -97,7 +97,7 @@ fun GeneratorScreen(
 
                 // 🔁 Generar
                 Button(
-                    onClick = { viewModel.generateOne() },
+                    onClick = { viewModel.generateCountry() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("🔁 Generar nuevo país")
@@ -111,7 +111,7 @@ fun GeneratorScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = { viewModel.saveGenerated() },
+                        onClick = { viewModel.saveGeneratedCountry() },
                         enabled = currentCountry != null,
                         modifier = Modifier.weight(1f)
                     ) {
@@ -119,7 +119,7 @@ fun GeneratorScreen(
                     }
 
                     OutlinedButton(
-                        onClick = { viewModel.discardGenerated() },
+                        onClick = { viewModel.discardGeneratedCountry() },
                         enabled = currentCountry != null,
                         modifier = Modifier.weight(1f)
                     ) {

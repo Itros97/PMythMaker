@@ -4,6 +4,7 @@ data class Country(
     val id: Long = 0,
     val name: String,
     val description: String?,
-    val foundationYear: Int?
+    val foundationYear: Int?,
+    val motto: String?
 )
 

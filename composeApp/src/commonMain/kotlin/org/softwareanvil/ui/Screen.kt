@@ -2,7 +2,9 @@ package org.softwareanvil.ui
 
 enum class Screen {
     HOME,
-    GENERATOR,
+    GENERATE_MENU,
+    GENERATE_COUNTRIES,
+    GENERATE_CHARACTERS,
     LIBRARY,
     COUNTRY_DETAIL
 }

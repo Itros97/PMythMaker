@@ -85,7 +85,7 @@ fun LibraryScreen(
         ConfirmDeleteCountryDialog(
             countryName = country.name,
             onConfirm = {
-                viewModel.delete(country)
+                viewModel.deleteCountry(country)
                 countryToDelete = null
             },
             onDismiss = {
@@ -97,7 +97,7 @@ fun LibraryScreen(
     if (showDeleteAllDialog) {
         ConfirmDeleteAllDialog(
             onConfirm = {
-                viewModel.deleteAll()
+                viewModel.deleteAllCountries()
                 showDeleteAllDialog = false
             },
             onDismiss = {
