@@ -8,7 +8,9 @@ import kotlin.random.Random
 
 class NameGenerator(
     private val syllables: List<Syllable>,
-    private val random: Random
+    private val random: Random,
+    private val prefixProbability: Float = 0.9f,
+    private val suffixProbability: Float = 0.7f
 ) {
 
     fun generate(category: SyllableCategory): String {
@@ -22,13 +24,13 @@ class NameGenerator(
         }
 
         val prefix = byType[SyllableType.PREFIX]
-            ?.takeIf { random.nextBoolean() }
+            ?.takeIf { random.nextFloat() < prefixProbability }
             ?.let { pickSyllable(it) }
 
         val core = pickSyllable(coreList)
 
         val suffix = byType[SyllableType.SUFFIX]
-            ?.takeIf { random.nextBoolean() }
+            ?.takeIf { random.nextFloat() < suffixProbability }
             ?.let { pickSyllable(it) }
 
         return buildName(prefix, core, suffix)

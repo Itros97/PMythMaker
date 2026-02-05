@@ -1,4 +1,3 @@
-// NameGenerationService.kt (REFACTORIZADO)
 package org.softwareanvil.domain.generator.name
 
 import org.softwareanvil.data.repositories.syllable.SyllableRepository
