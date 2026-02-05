@@ -1,34 +1,35 @@
--- package: org.softwareanvil.db
-
 CREATE TABLE IF NOT EXISTS countries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
     foundationYear INTEGER,
-    motto TEXT
+    motto TEXT,
+    createdAt INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000)
 );
 
 selectAll:
-SELECT id, name, description, foundationYear, motto
-FROM countries;
+SELECT * FROM countries;
 
 selectById:
-SELECT id, name, description, foundationYear, motto
-FROM countries
-WHERE id = ?;
+SELECT * FROM countries WHERE id = ?;
+
+selectRandom:
+SELECT * FROM countries ORDER BY RANDOM() LIMIT 1;
+
+count:
+SELECT COUNT(*) FROM countries;
 
 insert:
-INSERT INTO countries(name, description, foundationYear, motto)
-VALUES (?, ?, ?, ?);
+INSERT INTO countries(name, description, foundationYear, motto, createdAt)
+VALUES (?, ?, ?, ?, ?);
 
 updateById:
 UPDATE countries
 SET name = ?, description = ?, foundationYear = ?, motto = ?
 WHERE id = ?;
 
+deleteById:
+DELETE FROM countries WHERE id = ?;
+
 deleteAll:
 DELETE FROM countries;
-
-deleteById:
-DELETE FROM countries
-WHERE id = ?;
