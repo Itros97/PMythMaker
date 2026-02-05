@@ -1,18 +1,20 @@
 package org.softwareanvil.domain.generator.country
 
+import org.softwareanvil.domain.generator.GenerationConfig
+import org.softwareanvil.domain.generator.Generator
 import org.softwareanvil.domain.models.Country
 import kotlin.random.Random
 
 class CountryGenerator(
     private val countryName: String,
-    private val random: Random
-) {
+    private val random: Random,
+    private val config: GenerationConfig = GenerationConfig()
+) : Generator<Country> {
 
-    fun generate(): Country =
-        Country(
-            name = countryName,
-            description = "La maravillosa nación de $countryName.",
-            foundationYear = random.nextInt(0, 2000),
-            motto = "¡$countryName al poder!"
-        )
+    override fun generate(): Country = Country(
+        name = countryName,
+        description = config.countryDescriptionTemplate(countryName),
+        foundationYear = random.nextInt(config.minFoundationYear, config.maxFoundationYear),
+        motto = config.countryMottoTemplate(countryName)
+    )
 }

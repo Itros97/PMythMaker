@@ -1,13 +1,13 @@
 package org.softwareanvil.domain.generator.character
 
-import org.softwareanvil.domain.generator.name.NameGenerationService
+import org.softwareanvil.domain.generator.GenerationConfig
 import org.softwareanvil.domain.models.Character
 import org.softwareanvil.domain.models.Country
-import org.softwareanvil.domain.models.enums.SyllableCategory
 import kotlin.random.Random
 
 class CharacterGenerationService(
-    private val nameService: NameGenerationService
+    private val nameGenerator: CharacterNameGenerator,
+    private val config: GenerationConfig = GenerationConfig()
 ) {
 
     fun generateCharacter(
@@ -15,22 +15,14 @@ class CharacterGenerationService(
         country: Country?
     ): Character {
         val random = Random(seed)
-
-        val firstName = nameService.generateName(
-            category = SyllableCategory.PERSON,
-            seed = random.nextLong()
-        )
-
-        val lastName = nameService.generateName(
-            category = SyllableCategory.PERSON,
-            seed = random.nextLong()
-        )
+        val (firstName, lastName) = nameGenerator.generateFullName(seed)
 
         return CharacterGenerator(
             firstName = firstName,
             lastName = lastName,
             country = country,
-            random = random
+            random = random,
+            config = config
         ).generate()
     }
 }
