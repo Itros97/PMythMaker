@@ -23,19 +23,24 @@ class NameGenerator(
 
         val prefix = byType[SyllableType.PREFIX]
             ?.takeIf { random.nextBoolean() }
-            ?.let { pick(it) }
-        val core = pick(coreList)
+            ?.let { pickSyllable(it) }
+
+        val core = pickSyllable(coreList)
+
         val suffix = byType[SyllableType.SUFFIX]
             ?.takeIf { random.nextBoolean() }
-            ?.let { pick(it) }
+            ?.let { pickSyllable(it) }
 
-        return buildString {
+        return buildName(prefix, core, suffix)
+    }
+
+    private fun pickSyllable(list: List<Syllable>): Syllable =
+        weightedRandom(list, { it.weight.toInt() }, random)
+
+    private fun buildName(prefix: Syllable?, core: Syllable, suffix: Syllable?): String =
+        buildString {
             prefix?.let { append(it.value) }
             append(core.value)
             suffix?.let { append(it.value) }
         }.replaceFirstChar { it.uppercase() }
-    }
-
-    private fun pick(list: List<Syllable>): Syllable =
-        weightedRandom(list, { it.weight.toInt() }, random)
 }

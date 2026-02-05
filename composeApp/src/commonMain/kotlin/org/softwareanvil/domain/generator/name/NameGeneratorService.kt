@@ -1,6 +1,8 @@
+// NameGenerationService.kt (REFACTORIZADO)
 package org.softwareanvil.domain.generator.name
 
 import org.softwareanvil.data.repositories.syllable.SyllableRepository
+import org.softwareanvil.domain.models.Syllable
 import org.softwareanvil.domain.models.enums.SyllableCategory
 import org.softwareanvil.domain.models.enums.SyllableType
 import kotlin.random.Random
@@ -13,16 +15,14 @@ class NameGenerationService(
         category: SyllableCategory,
         seed: Long
     ): String {
+        val syllables = getSyllablesForCategory(category)
         val random = Random(seed)
 
-        val syllables =
-            syllableRepository.getByTypeAndCategory(SyllableType.PREFIX, category) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.CORE, category) +
-                    syllableRepository.getByTypeAndCategory(SyllableType.SUFFIX, category)
-
-        return NameGenerator(
-            syllables = syllables,
-            random = random
-        ).generate(category)
+        return NameGenerator(syllables, random).generate(category)
     }
+
+    private fun getSyllablesForCategory(category: SyllableCategory): List<Syllable> =
+        SyllableType.entries.flatMap { type ->
+            syllableRepository.getByTypeAndCategory(type, category)
+        }
 }

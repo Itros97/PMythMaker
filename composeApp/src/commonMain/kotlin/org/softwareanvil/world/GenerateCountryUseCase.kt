@@ -37,7 +37,7 @@ class GenerateWorldUseCase(
     }
 
     /* ----------------------------
-     * 🧙 CHARACTERS
+     * CHARACTERS
      * ---------------------------- */
 
     fun generateCharacter(
