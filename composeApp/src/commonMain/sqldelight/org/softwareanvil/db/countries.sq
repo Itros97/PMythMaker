@@ -2,13 +2,13 @@ CREATE TABLE IF NOT EXISTS countries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-    foundationYear INTEGER,
+    foundation_year INTEGER,
     motto TEXT,
-    createdAt INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000)
+    created_at INTEGER NOT NULL
 );
 
 selectAll:
-SELECT * FROM countries;
+SELECT * FROM countries ORDER BY name ASC;
 
 selectById:
 SELECT * FROM countries WHERE id = ?;
@@ -20,12 +20,12 @@ count:
 SELECT COUNT(*) FROM countries;
 
 insert:
-INSERT INTO countries(name, description, foundationYear, motto, createdAt)
+INSERT INTO countries(name, description, foundation_year, motto, created_at)
 VALUES (?, ?, ?, ?, ?);
 
 updateById:
 UPDATE countries
-SET name = ?, description = ?, foundationYear = ?, motto = ?
+SET name = ?, description = ?, foundation_year = ?, motto = ?
 WHERE id = ?;
 
 deleteById:

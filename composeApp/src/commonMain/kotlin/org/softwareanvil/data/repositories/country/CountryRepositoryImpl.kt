@@ -23,9 +23,9 @@ class CountryRepositoryImpl(
         queries.insert(
             name = country.name,
             description = country.description,
-            foundationYear = country.foundationYear?.toLong(),
+            foundation_year = country.foundationYear?.toLong(),
             motto = country.motto,
-            createdAt = country.createdAt
+            created_at = country.createdAt
         )
         return queries.selectAll()
             .executeAsList()
@@ -38,7 +38,7 @@ class CountryRepositoryImpl(
             id = id,
             name = country.name,
             description = country.description,
-            foundationYear = country.foundationYear?.toLong(),
+            foundation_year = country.foundationYear?.toLong(),
             motto = country.motto
         )
     }
@@ -56,8 +56,8 @@ class CountryRepositoryImpl(
             id = id,
             name = name,
             description = description ?: "",
-            foundationYear = foundationYear?.toInt(),
+            foundationYear = foundation_year?.toInt(),
             motto = motto ?: "",
-            createdAt = createdAt
+            createdAt = created_at
         )
 }
