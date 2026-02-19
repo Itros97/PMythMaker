@@ -7,8 +7,10 @@ import org.softwareanvil.data.repositories.syllable.SyllableRepositoryImpl
 import org.softwareanvil.data.seed.SyllableSeedInitializer
 import org.softwareanvil.db.CharactersQueries
 import org.softwareanvil.db.CountriesQueries
-import org.softwareanvil.db.PocketMythDatabase.Companion.Schema
 import org.softwareanvil.db.SyllablesQueries
+import org.softwareanvil.domain.generator.GenerationConfig
+import org.softwareanvil.domain.generator.character.CharacterGenerationService
+import org.softwareanvil.domain.generator.character.CharacterNameGenerator
 import org.softwareanvil.domain.generator.name.NameGenerationService
 import org.softwareanvil.domain.generator.world.WorldGeneratorService
 import org.softwareanvil.ui.world.WorldViewModel
@@ -20,29 +22,97 @@ import java.nio.file.Paths
 object WorldFactory {
 
     fun createWorldViewModel(): WorldViewModel {
+        val driver = setupDatabase()
+        val queries = createQueries(driver)
 
-        val dbPath =
-            "${System.getProperty("user.home")}/.pocket-mythsmith/pocket_mythsmith.db"
+        seedSyllables(driver, queries.syllables)
 
-        File(dbPath).parentFile.mkdirs()
+        val repositories = createRepositories(queries)
+        val services = createGenerationServices(repositories)
 
-        println("🟢 Creating driver")
-        //    val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
-        val driver = JdbcSqliteDriver("jdbc:sqlite:pocket_mythsmith.db")
+        val generateWorldUseCase = GenerateWorldUseCase(
+            worldGenerator = services.worldGenerator,
+            countryRepository = repositories.country,
+            characterRepository = repositories.character
+        )
 
+        return WorldViewModel(generateWorldUseCase)
+    }
 
-        // TODO: Remove this line to persist data between runs
-//        if (dbFile.exists()) {
-//            dbFile.delete()
-//        }
-        println("🟡 Calling Schema.create")
-        Schema.create(driver)
+    private fun setupDatabase(): JdbcSqliteDriver {
+        val dbPath = "pocket_mythsmith.db"
 
+        val dbFile = File(dbPath)
+        if (dbFile.exists()) {
+            dbFile.delete()
+            println("🗑️ Deleted existing database")
+        }
 
-        val syllablesQueries = SyllablesQueries(driver)
-        val countriesQueries = CountriesQueries(driver)
-        val charactersQueries = CharactersQueries(driver)
+        println("🟢 Creating driver at: $dbPath")
+        println("📁 Absolute path: ${dbFile.absolutePath}")
 
+        val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
+
+        println("🔨 Creating tables manually")
+        createTables(driver)
+
+        return driver
+    }
+
+    private fun createTables(driver: JdbcSqliteDriver) {
+        driver.execute(
+            null, """
+            CREATE TABLE IF NOT EXISTS countries (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                description TEXT,
+                foundation_year INTEGER,
+                motto TEXT,
+                created_at INTEGER NOT NULL
+            )
+        """.trimIndent(), 0, null
+        )
+
+        driver.execute(
+            null, """
+            CREATE TABLE IF NOT EXISTS characters (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                age INTEGER,
+                country_id INTEGER,
+                occupation TEXT,
+                description TEXT,
+                created_at INTEGER NOT NULL,
+                FOREIGN KEY(country_id) REFERENCES countries(id)
+            )
+        """.trimIndent(), 0, null
+        )
+        
+        driver.execute(
+            null, """
+            CREATE TABLE IF NOT EXISTS syllables (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                type TEXT NOT NULL,
+                category TEXT NOT NULL,
+                syllable TEXT NOT NULL,
+                weight INTEGER NOT NULL
+            )
+        """.trimIndent(), 0, null
+        )
+
+        println("✅ Tables created successfully")
+    }
+
+    private fun createQueries(driver: JdbcSqliteDriver): Queries {
+        return Queries(
+            syllables = SyllablesQueries(driver),
+            countries = CountriesQueries(driver),
+            characters = CharactersQueries(driver)
+        )
+    }
+
+    private fun seedSyllables(driver: JdbcSqliteDriver, syllablesQueries: SyllablesQueries) {
         val syllablesSeedSql = Files.readString(
             Paths.get("src/commonMain/resources/seed/syllables_default.sql")
         )
@@ -51,30 +121,58 @@ object WorldFactory {
             driver = driver,
             syllablesQueries = syllablesQueries
         ).seedIfNeeded(syllablesSeedSql)
-
-        val syllableRepository =
-            SyllableRepositoryImpl(syllablesQueries)
-
-        val countryRepository =
-            CountryRepositoryImpl(countriesQueries)
-
-        val nameGenerationService =
-            NameGenerationService(syllableRepository)
-
-        val worldGeneratorService =
-            WorldGeneratorService(nameGenerationService)
-
-        val characterRepository =
-            CharacterRepositoryImpl(charactersQueries)
-
-        val generateWorldUseCase =
-            GenerateWorldUseCase(
-                worldGenerator = worldGeneratorService,
-                countryRepository = countryRepository,
-                characterRepository = characterRepository
-            )
-
-
-        return WorldViewModel(generateWorldUseCase)
     }
+
+    private fun createRepositories(queries: Queries): Repositories {
+        return Repositories(
+            syllable = SyllableRepositoryImpl(queries.syllables),
+            country = CountryRepositoryImpl(queries.countries),
+            character = CharacterRepositoryImpl(queries.characters)
+        )
+    }
+
+    private fun createGenerationServices(repositories: Repositories): GenerationServices {
+        val config = GenerationConfig()
+
+        val nameGenerationService = NameGenerationService(repositories.syllable)
+
+        val characterNameGenerator = CharacterNameGenerator(nameGenerationService)
+
+        val characterGenerationService = CharacterGenerationService(
+            nameGenerator = characterNameGenerator,
+            countryRepository = repositories.country,
+            config = config
+        )
+
+        val worldGeneratorService = WorldGeneratorService(
+            nameGenerationService = nameGenerationService,
+            characterGenerationService = characterGenerationService
+        )
+
+        return GenerationServices(
+            nameGeneration = nameGenerationService,
+            characterNameGeneration = characterNameGenerator,
+            characterGeneration = characterGenerationService,
+            worldGenerator = worldGeneratorService
+        )
+    }
+
+    private data class Queries(
+        val syllables: SyllablesQueries,
+        val countries: CountriesQueries,
+        val characters: CharactersQueries
+    )
+
+    private data class Repositories(
+        val syllable: SyllableRepositoryImpl,
+        val country: CountryRepositoryImpl,
+        val character: CharacterRepositoryImpl
+    )
+
+    private data class GenerationServices(
+        val nameGeneration: NameGenerationService,
+        val characterNameGeneration: CharacterNameGenerator,
+        val characterGeneration: CharacterGenerationService,
+        val worldGenerator: WorldGeneratorService
+    )
 }
