@@ -7,6 +7,7 @@ import org.softwareanvil.data.repositories.syllable.SyllableRepositoryImpl
 import org.softwareanvil.data.seed.SyllableSeedInitializer
 import org.softwareanvil.db.CharactersQueries
 import org.softwareanvil.db.CountriesQueries
+import org.softwareanvil.db.PocketMythDatabase
 import org.softwareanvil.db.SyllablesQueries
 import org.softwareanvil.domain.generator.GenerationConfig
 import org.softwareanvil.domain.generator.character.CharacterGenerationService
@@ -42,66 +43,23 @@ object WorldFactory {
     private fun setupDatabase(): JdbcSqliteDriver {
         val dbPath = "pocket_mythsmith.db"
 
+        // TODO : FOR DEVELOPMENT ONLY - Remove this in production to preserve user data
         val dbFile = File(dbPath)
-        if (dbFile.exists()) {
-            dbFile.delete()
-            println("🗑️ Deleted existing database")
-        }
+//        if (dbFile.exists()) {
+//            dbFile.delete()
+//            println("🗑️ Deleted existing database")
+//        }
 
         println("🟢 Creating driver at: $dbPath")
         println("📁 Absolute path: ${dbFile.absolutePath}")
 
         val driver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
 
-        println("🔨 Creating tables manually")
-        createTables(driver)
+        println("🟡 Creating schema from .sq files")
+        PocketMythDatabase.Schema.create(driver)
+        println("✅ Schema created successfully")
 
         return driver
-    }
-
-    private fun createTables(driver: JdbcSqliteDriver) {
-        driver.execute(
-            null, """
-            CREATE TABLE IF NOT EXISTS countries (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                description TEXT,
-                foundation_year INTEGER,
-                motto TEXT,
-                created_at INTEGER NOT NULL
-            )
-        """.trimIndent(), 0, null
-        )
-
-        driver.execute(
-            null, """
-            CREATE TABLE IF NOT EXISTS characters (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT NOT NULL,
-                last_name TEXT NOT NULL,
-                age INTEGER,
-                country_id INTEGER,
-                occupation TEXT,
-                description TEXT,
-                created_at INTEGER NOT NULL,
-                FOREIGN KEY(country_id) REFERENCES countries(id)
-            )
-        """.trimIndent(), 0, null
-        )
-        
-        driver.execute(
-            null, """
-            CREATE TABLE IF NOT EXISTS syllables (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                type TEXT NOT NULL,
-                category TEXT NOT NULL,
-                syllable TEXT NOT NULL,
-                weight INTEGER NOT NULL
-            )
-        """.trimIndent(), 0, null
-        )
-
-        println("✅ Tables created successfully")
     }
 
     private fun createQueries(driver: JdbcSqliteDriver): Queries {
@@ -156,7 +114,7 @@ object WorldFactory {
             worldGenerator = worldGeneratorService
         )
     }
-
+    
     private data class Queries(
         val syllables: SyllablesQueries,
         val countries: CountriesQueries,
