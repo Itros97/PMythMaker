@@ -124,6 +124,11 @@ class WorldViewModel(
         _generatedCharacter.value = null
     }
 
+    fun updateCharacter(character: Character) {
+        generateWorldUseCase.updateCharacter(character)
+        loadCharacters()
+    }
+
     fun discardGeneratedCharacter() {
         _generatedCharacter.value = null
     }
@@ -139,6 +144,11 @@ class WorldViewModel(
     fun deleteCharacter(character: Character) {
         generateWorldUseCase.deleteCharacter(character)
         // loadCharacters()
+    }
+
+    fun updateSelectedCharacter(character: Character) {
+        generateWorldUseCase.updateCharacter(character)
+        loadCharacters()
     }
 
 

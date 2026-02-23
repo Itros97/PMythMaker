@@ -100,6 +100,7 @@ fun CharacterLibraryScreen(
             itemName = "${character.firstName} ${character.lastName}",
             onConfirm = {
                 viewModel.deleteCharacter(character)
+                viewModel.loadCharacters()
                 characterToDelete = null
             },
             onDismiss = {

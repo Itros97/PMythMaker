@@ -58,4 +58,8 @@ class GenerateWorldUseCase(
         characterRepository.deleteById(character.id)
     }
 
+    fun updateCharacter(character: Character) {
+        characterRepository.updateById(character.id, character)
+    }
+
 }
