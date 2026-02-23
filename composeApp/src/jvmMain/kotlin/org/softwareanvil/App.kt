@@ -6,9 +6,11 @@ import org.softwareanvil.ui.generator.CharacterGeneratorScreen
 import org.softwareanvil.ui.generator.GenerateMenuScreen
 import org.softwareanvil.ui.generator.GeneratorScreen
 import org.softwareanvil.ui.home.HomeScreen
+import org.softwareanvil.ui.library.LibraryMenuScreen
+import org.softwareanvil.ui.library.character.CharacterDetailScreen
+import org.softwareanvil.ui.library.character.CharacterLibraryScreen
 import org.softwareanvil.ui.library.country.CountryDetailScreen
-import org.softwareanvil.ui.library.country.LibraryScreen
-
+import org.softwareanvil.ui.library.country.CountryLibraryScreen
 
 @Composable
 fun App() {
@@ -22,8 +24,12 @@ fun App() {
 
         Screen.HOME -> HomeScreen(
             onGenerate = { screen = Screen.GENERATE_MENU },
-            onLibrary = { screen = Screen.LIBRARY }
+            onLibrary = { screen = Screen.LIBRARY_MENU }  // ← Cambio: va al menú
         )
+
+        // ─────────────────────────────────────────────────────────
+        // GENERADORES
+        // ─────────────────────────────────────────────────────────
 
         Screen.GENERATE_MENU -> GenerateMenuScreen(
             onGenerateCountries = { screen = Screen.GENERATE_COUNTRIES },
@@ -36,23 +42,45 @@ fun App() {
             onBack = { screen = Screen.GENERATE_MENU }
         )
 
-        Screen.GENERATE_CHARACTERS -> {
-            CharacterGeneratorScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.GENERATE_MENU }
-            )
-        }
-
-        Screen.LIBRARY -> LibraryScreen(
+        Screen.GENERATE_CHARACTERS -> CharacterGeneratorScreen(
             viewModel = viewModel,
+            onBack = { screen = Screen.GENERATE_MENU }
+        )
+
+        // ─────────────────────────────────────────────────────────
+        // BIBLIOTECAS
+        // ─────────────────────────────────────────────────────────
+
+        Screen.LIBRARY_MENU -> LibraryMenuScreen(
             onBack = { screen = Screen.HOME },
+            onCountriesClick = { screen = Screen.COUNTRY_LIBRARY },
+            onCharactersClick = { screen = Screen.CHARACTER_LIBRARY }
+        )
+
+        Screen.COUNTRY_LIBRARY -> CountryLibraryScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.LIBRARY_MENU },
             onEdit = { screen = Screen.COUNTRY_DETAIL }
         )
 
+        Screen.CHARACTER_LIBRARY -> CharacterLibraryScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.LIBRARY_MENU },
+            onEdit = { screen = Screen.CHARACTER_DETAIL }
+        )
+
+        // ─────────────────────────────────────────────────────────
+        // DETALLES / EDICIÓN
+        // ─────────────────────────────────────────────────────────
+
         Screen.COUNTRY_DETAIL -> CountryDetailScreen(
             viewModel = viewModel,
-            onBack = { screen = Screen.LIBRARY }
+            onBack = { screen = Screen.COUNTRY_LIBRARY }
+        )
+
+        Screen.CHARACTER_DETAIL -> CharacterDetailScreen(
+            viewModel = viewModel,
+            onBack = { screen = Screen.CHARACTER_LIBRARY }
         )
     }
-
 }

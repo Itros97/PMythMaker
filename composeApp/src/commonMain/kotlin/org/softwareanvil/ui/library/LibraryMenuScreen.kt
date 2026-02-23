@@ -1,4 +1,4 @@
-package org.softwareanvil.ui.generator
+package org.softwareanvil.ui.library
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -10,10 +10,10 @@ import androidx.compose.ui.unit.dp
 import org.softwareanvil.ui.components.MenuOptionCard
 
 @Composable
-fun GenerateMenuScreen(
-    onGenerateCountries: () -> Unit,
-    onGenerateCharacters: () -> Unit,
-    onBack: () -> Unit
+fun LibraryMenuScreen(
+    onBack: () -> Unit,
+    onCountriesClick: () -> Unit,
+    onCharactersClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -29,12 +29,12 @@ fun GenerateMenuScreen(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "✨ Generadores",
+            text = "📚 Bibliotecas",
             style = MaterialTheme.typography.headlineMedium
         )
 
         Text(
-            text = "Selecciona qué quieres generar",
+            text = "Selecciona qué biblioteca quieres ver",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -44,31 +44,15 @@ fun GenerateMenuScreen(
         MenuOptionCard(
             icon = "🌍",
             title = "Países",
-            description = "Genera nombres de países aleatorios",
-            onClick = onGenerateCountries
+            description = "Ver y gestionar países guardados",
+            onClick = onCountriesClick
         )
 
         MenuOptionCard(
             icon = "👤",
             title = "Personajes",
-            description = "Genera nombres de personajes aleatorios",
-            onClick = onGenerateCharacters
-        )
-
-        MenuOptionCard(
-            icon = "🛐",
-            title = "Religiones",
-            description = "Próximamente disponible",
-            onClick = {},
-            enabled = false
-        )
-
-        MenuOptionCard(
-            icon = "📜",
-            title = "Eventos históricos",
-            description = "Próximamente disponible",
-            onClick = {},
-            enabled = false
+            description = "Ver y gestionar personajes guardados",
+            onClick = onCharactersClick
         )
     }
 }

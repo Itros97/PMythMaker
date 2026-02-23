@@ -13,7 +13,7 @@ import org.softwareanvil.ui.dialog.ConfirmDeleteUnitaryDialog
 import org.softwareanvil.ui.world.WorldViewModel
 
 @Composable
-fun LibraryScreen(
+fun CountryLibraryScreen(
     viewModel: WorldViewModel,
     onBack: () -> Unit,
     onEdit: () -> Unit
