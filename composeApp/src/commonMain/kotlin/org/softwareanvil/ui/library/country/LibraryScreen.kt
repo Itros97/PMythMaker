@@ -1,4 +1,4 @@
-package org.softwareanvil.ui.library
+package org.softwareanvil.ui.library.country
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.softwareanvil.domain.models.Country
 import org.softwareanvil.ui.dialog.ConfirmDeleteAllDialog
-import org.softwareanvil.ui.dialog.ConfirmDeleteCountryDialog
+import org.softwareanvil.ui.dialog.ConfirmDeleteUnitaryDialog
 import org.softwareanvil.ui.world.WorldViewModel
 
 @Composable
@@ -24,7 +24,7 @@ fun LibraryScreen(
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.load()
+        viewModel.loadCountries()
     }
 
     Column(Modifier.padding(16.dp)) {
@@ -82,8 +82,9 @@ fun LibraryScreen(
     }
 
     countryToDelete?.let { country ->
-        ConfirmDeleteCountryDialog(
-            countryName = country.name,
+        ConfirmDeleteUnitaryDialog(
+            itemType = "país",
+            itemName = country.name,
             onConfirm = {
                 viewModel.deleteCountry(country)
                 countryToDelete = null
@@ -96,6 +97,7 @@ fun LibraryScreen(
 
     if (showDeleteAllDialog) {
         ConfirmDeleteAllDialog(
+            itemType = "Countrys",
             onConfirm = {
                 viewModel.deleteAllCountries()
                 showDeleteAllDialog = false
@@ -105,6 +107,4 @@ fun LibraryScreen(
             }
         )
     }
-
-
 }

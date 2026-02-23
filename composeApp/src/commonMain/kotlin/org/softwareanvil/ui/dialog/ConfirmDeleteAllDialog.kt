@@ -10,42 +10,34 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ConfirmDeleteAllDialog(
+    itemType: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
     var confirmationText by remember { mutableStateOf("") }
+    val isConfirmed = confirmationText == CONFIRMATION_WORD
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("⚠️ Eliminación total") },
         text = {
             Column {
-                Text(
-                    "Vas a borrar TODOS los países.\n\n" +
-                            "Esta acción es irreversible.\n\n" +
-                            "Escribe CONFIRMAR para continuar."
-                )
+                Text(buildConfirmationMessage(itemType))
 
                 Spacer(Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ConfirmationTextField(
                     value = confirmationText,
-                    onValueChange = { confirmationText = it.uppercase() },
-                    label = { Text("Escribe CONFIRMAR") },
-                    singleLine = true
+                    onValueChange = { confirmationText = it.uppercase() }
                 )
             }
         },
         confirmButton = {
-            Button(
-                onClick = onConfirm,
-                enabled = confirmationText == "CONFIRMAR",
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
-                )
-            ) {
-                Text("Borrar todo")
-            }
+            DangerButton(
+                text = "Borrar todo",
+                enabled = isConfirmed,
+                onClick = onConfirm
+            )
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
@@ -53,4 +45,41 @@ fun ConfirmDeleteAllDialog(
             }
         }
     )
+}
+
+private const val CONFIRMATION_WORD = "CONFIRMAR"
+
+private fun buildConfirmationMessage(itemType: String): String =
+    "Vas a borrar TODOS los $itemType.\n\n" +
+            "Esta acción es irreversible.\n\n" +
+            "Escribe $CONFIRMATION_WORD para continuar."
+
+@Composable
+private fun ConfirmationTextField(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text("Escribe $CONFIRMATION_WORD") },
+        singleLine = true
+    )
+}
+
+@Composable
+private fun DangerButton(
+    text: String,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error
+        )
+    ) {
+        Text(text)
+    }
 }

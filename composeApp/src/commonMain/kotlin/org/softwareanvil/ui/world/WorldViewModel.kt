@@ -15,6 +15,9 @@ class WorldViewModel(
     private val _countries = MutableStateFlow<List<Country>>(emptyList())
     val countries: StateFlow<List<Country>> = _countries
 
+    private val _characters = MutableStateFlow<List<Character>>(emptyList())
+    val characters: StateFlow<List<Character>> = _characters
+
     private val _generatedCountry = MutableStateFlow<Country?>(null)
     val generatedCountry: StateFlow<Country?> = _generatedCountry
 
@@ -27,19 +30,37 @@ class WorldViewModel(
     val selectedCharacter: StateFlow<Character?> = _selectedCharacter
 
     /* ───────────────────────────────
-     * INITIALIZATION, TO LOAD DATA ON START
+     * INITIALIZATION TO LOAD DATA ON START AND RELOAD
      * ─────────────────────────────── */
 
     init {
-        load()
+        loadCountries()
+        loadCharacters()
     }
 
     /* ───────────────────────────────
-     * LOAD TO REFRESH DATA
+     * LOAD COUNTRIES
      * ─────────────────────────────── */
 
-    fun load() {
+    fun loadCountries() {
         _countries.value = generateWorldUseCase.getAllCountries()
+    }
+
+    /* ───────────────────────────────
+     * LOAD CHARACTERS
+     * ─────────────────────────────── */
+
+    fun loadCharacters() {
+        _characters.value = generateWorldUseCase.getAllCharacters()
+    }
+
+    /* ───────────────────────────────
+     * LOAD ALL (COUNTRIES + CHARACTERS)
+     * ─────────────────────────────── */
+
+    fun loadAll() {
+        loadCountries()
+        loadCharacters()
     }
 
     /* ───────────────────────────────
@@ -55,7 +76,7 @@ class WorldViewModel(
         val country = _generatedCountry.value ?: return
         generateWorldUseCase.saveCountry(country)
         _generatedCountry.value = null
-        load()
+        loadCountries()
     }
 
     fun discardGeneratedCountry() {
@@ -64,17 +85,17 @@ class WorldViewModel(
 
     fun editCountry(country: Country) {
         generateWorldUseCase.updateCountry(country)
-        load()
+        loadCountries()
     }
 
     fun deleteCountry(country: Country) {
         generateWorldUseCase.deleteCountry(country)
-        load()
+        loadCountries()
     }
 
     fun deleteAllCountries() {
         generateWorldUseCase.deleteAllCountries()
-        load()
+        loadCountries()
     }
 
     fun selectCountry(country: Country) {
