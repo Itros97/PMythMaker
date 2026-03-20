@@ -26,10 +26,6 @@ fun CharacterGeneratorScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        // ─────────────────────────────────────────────────────────
-        // HEADER
-        // ─────────────────────────────────────────────────────────
-
         Button(onClick = onBack) {
             Text("⬅ Volver")
         }
@@ -74,7 +70,7 @@ fun CharacterGeneratorScreen(
         }
 
         // ─────────────────────────────────────────────────────────
-        // BOTONES DE ACCIÓN
+        // ACTION BUTTONS
         // ─────────────────────────────────────────────────────────
 
         Button(
@@ -108,7 +104,7 @@ fun CharacterGeneratorScreen(
 }
 
 // ═════════════════════════════════════════════════════════════
-// ESTADO VACÍO
+// EMPTY STATE
 // ═════════════════════════════════════════════════════════════
 
 @Composable

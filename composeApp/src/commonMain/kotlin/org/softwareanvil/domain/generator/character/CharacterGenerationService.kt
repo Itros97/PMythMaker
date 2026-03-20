@@ -12,7 +12,6 @@ class CharacterGenerationService(
     private val config: GenerationConfig = GenerationConfig()
 ) {
 
-    // Genera character con país aleatorio de BD
     fun generateCharacter(seed: Long): Character {
         val random = Random(seed)
         val (firstName, lastName) = nameGenerator.generateFullName(seed)

@@ -40,11 +40,15 @@ class GenerateWorldUseCase(
      * CHARACTERS
      * ---------------------------- */
 
-    fun generateCharacter(
+    fun generateCharacterWithoutCountry(
         seed: Long,
         country: Country?
     ): Character {
         return worldGenerator.generateCharacterWithCountry(seed, country)
+    }
+
+    fun generateCharacter(seed: Long): Character {
+        return worldGenerator.generateCharacter(seed)
     }
 
     fun saveCharacter(character: Character) {

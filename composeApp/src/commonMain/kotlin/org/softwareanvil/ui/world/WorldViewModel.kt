@@ -112,7 +112,7 @@ class WorldViewModel(
 
     fun generateCharacter() {
         _generatedCharacter.value =
-            generateWorldUseCase.generateCharacter(
+            generateWorldUseCase.generateCharacterWithoutCountry(
                 seed = Random.nextLong(),
                 country = null
             )
@@ -122,11 +122,6 @@ class WorldViewModel(
         val character = _generatedCharacter.value ?: return
         generateWorldUseCase.saveCharacter(character)
         _generatedCharacter.value = null
-    }
-
-    fun updateCharacter(character: Character) {
-        generateWorldUseCase.updateCharacter(character)
-        loadCharacters()
     }
 
     fun discardGeneratedCharacter() {
@@ -143,7 +138,7 @@ class WorldViewModel(
 
     fun deleteCharacter(character: Character) {
         generateWorldUseCase.deleteCharacter(character)
-        // loadCharacters()
+        loadCharacters()
     }
 
     fun updateSelectedCharacter(character: Character) {
