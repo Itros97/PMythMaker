@@ -110,11 +110,11 @@ class WorldViewModel(
      * CHARACTER
      * ─────────────────────────────── */
 
-    fun generateCharacter() {
+    fun generateCharacter(country: Country? = null) {
         _generatedCharacter.value =
             generateWorldUseCase.generateCharacterWithoutCountry(
                 seed = Random.nextLong(),
-                country = null
+                country = country
             )
     }
 
@@ -144,6 +144,10 @@ class WorldViewModel(
     fun updateSelectedCharacter(character: Character) {
         generateWorldUseCase.updateCharacter(character)
         loadCharacters()
+    }
+
+    fun updateGeneratedCharacterCountry(country: Country?) {
+        _generatedCharacter.value = _generatedCharacter.value?.copy(country = country)
     }
 
 
