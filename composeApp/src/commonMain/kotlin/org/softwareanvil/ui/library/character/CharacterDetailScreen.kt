@@ -5,10 +5,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.softwareanvil.ui.character.CharacterCard
 import org.softwareanvil.ui.world.WorldViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +23,7 @@ fun CharacterDetailScreen(
     }
 
     val character = selectedCharacter!!
-    var isEditMode by remember { mutableStateOf(true) }
+    var isEditing by remember { mutableStateOf(false) }
 
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -52,9 +50,7 @@ fun CharacterDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(if (isEditMode) "Editar Personaje" else "Detalles del Personaje")
-                },
+                title = { Text("Detalles del Personaje") },
                 navigationIcon = {
                     TextButton(onClick = onBack) {
                         Text("← Volver")
@@ -72,95 +68,83 @@ fun CharacterDetailScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = if (isEditMode) "Modifica los datos del personaje"
-                else "Información del personaje",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                if (isEditMode) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            OutlinedTextField(
-                                value = firstName,
-                                onValueChange = { firstName = it },
-                                label = { Text("Nombre") },
-                                modifier = Modifier.weight(1f),
-                                singleLine = true
-                            )
-                            OutlinedTextField(
-                                value = lastName,
-                                onValueChange = { lastName = it },
-                                label = { Text("Apellido") },
-                                modifier = Modifier.weight(1f),
-                                singleLine = true
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            OutlinedTextField(
-                                value = age,
-                                onValueChange = { age = it.filter(Char::isDigit) },
-                                label = { Text("Edad") },
-                                modifier = Modifier.weight(1f),
-                                singleLine = true
-                            )
-                            OutlinedTextField(
-                                value = character.country?.name ?: "Sin país",
-                                onValueChange = {},
-                                label = { Text("País") },
-                                modifier = Modifier.weight(1f),
-                                enabled = false,
-                                singleLine = true
-                            )
-                        }
-
                         OutlinedTextField(
-                            value = occupation,
-                            onValueChange = { occupation = it },
-                            label = { Text("Ocupación (opcional)") },
-                            modifier = Modifier.fillMaxWidth(),
-                            singleLine = true
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            label = { Text("Nombre") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            enabled = isEditing
                         )
-
                         OutlinedTextField(
-                            value = description,
-                            onValueChange = { description = it },
-                            label = { Text("Descripción (opcional)") },
-                            modifier = Modifier.fillMaxWidth(),
-                            minLines = 3,
-                            maxLines = 5
+                            value = lastName,
+                            onValueChange = { lastName = it },
+                            label = { Text("Apellido") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            enabled = isEditing
                         )
                     }
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
-                        contentAlignment = Alignment.Center
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        CharacterCard(character = character)
+                        OutlinedTextField(
+                            value = age,
+                            onValueChange = { age = it.filter(Char::isDigit) },
+                            label = { Text("Edad") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            enabled = isEditing
+                        )
+                        OutlinedTextField(
+                            value = character.country?.name ?: "Sin país",
+                            onValueChange = {},
+                            label = { Text("País") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            enabled = false
+                        )
                     }
+
+                    OutlinedTextField(
+                        value = occupation,
+                        onValueChange = { occupation = it },
+                        label = { Text("Ocupación (opcional)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        enabled = isEditing
+                    )
+
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = { Text("Descripción (opcional)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 3,
+                        maxLines = 5,
+                        enabled = isEditing
+                    )
                 }
             }
 
-            if (isEditMode) {
+            // ── Botones ──────────────────────────────────
+            if (isEditing) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -168,7 +152,7 @@ fun CharacterDetailScreen(
                     OutlinedButton(
                         onClick = {
                             resetFields()
-                            isEditMode = false
+                            isEditing = false
                         },
                         modifier = Modifier.weight(1f)
                     ) {
@@ -185,7 +169,7 @@ fun CharacterDetailScreen(
                                 description = description.ifBlank { null }
                             )
                             viewModel.updateSelectedCharacter(updated)
-                            isEditMode = false
+                            isEditing = false
                         },
                         modifier = Modifier.weight(1f),
                         enabled = firstName.isNotBlank() && lastName.isNotBlank()
@@ -199,7 +183,7 @@ fun CharacterDetailScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = { isEditMode = true },
+                        onClick = { isEditing = true },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Editar")
@@ -216,6 +200,8 @@ fun CharacterDetailScreen(
                     }
                 }
             }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
