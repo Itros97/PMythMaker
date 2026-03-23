@@ -1,6 +1,10 @@
 package org.softwareanvil
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import org.softwareanvil.ui.Screen
 import org.softwareanvil.ui.generator.CharacterGeneratorScreen
 import org.softwareanvil.ui.generator.GenerateMenuScreen
@@ -25,84 +29,89 @@ fun App() {
     var isDarkTheme by remember { mutableStateOf(false) }
 
     PocketMythsmithTheme(isDarkTheme = isDarkTheme) {
-        when (screen) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            when (screen) {
 
-            Screen.HOME -> HomeScreen(
-                onGenerate = { screen = Screen.GENERATE_MENU },
-                onLibrary = { screen = Screen.LIBRARY_MENU },
-                onSettings = { screen = Screen.SETTINGS },
-                onMetadata = { screen = Screen.METADATA }
-            )
+                Screen.HOME -> HomeScreen(
+                    onGenerate = { screen = Screen.GENERATE_MENU },
+                    onLibrary = { screen = Screen.LIBRARY_MENU },
+                    onSettings = { screen = Screen.SETTINGS },
+                    onMetadata = { screen = Screen.METADATA }
+                )
 
-            // ─────────────────────────────────────────────────────────
-            // GENERADORES
-            // ─────────────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────────────
+                // GENERADORES
+                // ─────────────────────────────────────────────────────────
 
-            Screen.GENERATE_MENU -> GenerateMenuScreen(
-                onGenerateCountries = { screen = Screen.GENERATE_COUNTRIES },
-                onGenerateCharacters = { screen = Screen.GENERATE_CHARACTERS },
-                onBack = { screen = Screen.HOME }
-            )
+                Screen.GENERATE_MENU -> GenerateMenuScreen(
+                    onGenerateCountries = { screen = Screen.GENERATE_COUNTRIES },
+                    onGenerateCharacters = { screen = Screen.GENERATE_CHARACTERS },
+                    onBack = { screen = Screen.HOME }
+                )
 
-            Screen.GENERATE_COUNTRIES -> GeneratorScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.GENERATE_MENU }
-            )
+                Screen.GENERATE_COUNTRIES -> GeneratorScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.GENERATE_MENU }
+                )
 
-            Screen.GENERATE_CHARACTERS -> CharacterGeneratorScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.GENERATE_MENU }
-            )
+                Screen.GENERATE_CHARACTERS -> CharacterGeneratorScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.GENERATE_MENU }
+                )
 
-            // ─────────────────────────────────────────────────────────
-            // BIBLIOTECAS
-            // ─────────────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────────────
+                // BIBLIOTECAS
+                // ─────────────────────────────────────────────────────────
 
-            Screen.LIBRARY_MENU -> LibraryMenuScreen(
-                onBack = { screen = Screen.HOME },
-                onCountriesClick = { screen = Screen.COUNTRY_LIBRARY },
-                onCharactersClick = { screen = Screen.CHARACTER_LIBRARY }
-            )
+                Screen.LIBRARY_MENU -> LibraryMenuScreen(
+                    onBack = { screen = Screen.HOME },
+                    onCountriesClick = { screen = Screen.COUNTRY_LIBRARY },
+                    onCharactersClick = { screen = Screen.CHARACTER_LIBRARY }
+                )
 
-            Screen.COUNTRY_LIBRARY -> CountryLibraryScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.LIBRARY_MENU },
-                onEdit = { screen = Screen.COUNTRY_DETAIL }
-            )
+                Screen.COUNTRY_LIBRARY -> CountryLibraryScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.LIBRARY_MENU },
+                    onEdit = { screen = Screen.COUNTRY_DETAIL }
+                )
 
-            Screen.CHARACTER_LIBRARY -> CharacterLibraryScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.LIBRARY_MENU },
-                onEdit = { screen = Screen.CHARACTER_DETAIL }
-            )
+                Screen.CHARACTER_LIBRARY -> CharacterLibraryScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.LIBRARY_MENU },
+                    onEdit = { screen = Screen.CHARACTER_DETAIL }
+                )
 
-            // ─────────────────────────────────────────────────────────
-            // DETALLES / EDICIÓN
-            // ─────────────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────────────
+                // DETALLES / EDICIÓN
+                // ─────────────────────────────────────────────────────────
 
-            Screen.COUNTRY_DETAIL -> CountryDetailScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.COUNTRY_LIBRARY }
-            )
+                Screen.COUNTRY_DETAIL -> CountryDetailScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.COUNTRY_LIBRARY }
+                )
 
-            Screen.CHARACTER_DETAIL -> CharacterDetailScreen(
-                viewModel = viewModel,
-                onBack = { screen = Screen.CHARACTER_LIBRARY }
-            )
+                Screen.CHARACTER_DETAIL -> CharacterDetailScreen(
+                    viewModel = viewModel,
+                    onBack = { screen = Screen.CHARACTER_LIBRARY }
+                )
 
-            // ─────────────────────────────────────────────────────────
-            // AJUSTES / INFO
-            // ─────────────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────────────
+                // AJUSTES / INFO
+                // ─────────────────────────────────────────────────────────
 
-            Screen.SETTINGS -> SettingsScreen(
-                isDarkTheme = isDarkTheme,
-                onThemeChange = { isDarkTheme = it },
-                onBack = { screen = Screen.HOME }
-            )
+                Screen.SETTINGS -> SettingsScreen(
+                    isDarkTheme = isDarkTheme,
+                    onThemeChange = { isDarkTheme = it },
+                    onBack = { screen = Screen.HOME }
+                )
 
-            Screen.METADATA -> MetadataScreen(
-                onBack = { screen = Screen.HOME }
-            )
+                Screen.METADATA -> MetadataScreen(
+                    onBack = { screen = Screen.HOME }
+                )
+            }
         }
     }
 }
