@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.softwareanvil.domain.models.Country
 import org.softwareanvil.ui.world.WorldViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -16,6 +17,7 @@ fun CharacterDetailScreen(
     onBack: () -> Unit
 ) {
     val selectedCharacter by viewModel.selectedCharacter.collectAsState()
+    val countries by viewModel.countries.collectAsState()
 
     if (selectedCharacter == null) {
         LaunchedEffect(Unit) { onBack() }
@@ -30,6 +32,12 @@ fun CharacterDetailScreen(
     var age by remember { mutableStateOf("") }
     var occupation by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var selectedCountry by remember { mutableStateOf<Country?>(null) }
+    var countryExpanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadCountries()
+    }
 
     LaunchedEffect(character) {
         firstName = character.firstName
@@ -37,6 +45,7 @@ fun CharacterDetailScreen(
         age = character.age?.toString() ?: ""
         occupation = character.occupation ?: ""
         description = character.description ?: ""
+        selectedCountry = character.country
     }
 
     fun resetFields() {
@@ -45,6 +54,7 @@ fun CharacterDetailScreen(
         age = character.age?.toString() ?: ""
         occupation = character.occupation ?: ""
         description = character.description ?: ""
+        selectedCountry = character.country
     }
 
     Scaffold(
@@ -112,14 +122,60 @@ fun CharacterDetailScreen(
                             singleLine = true,
                             enabled = isEditing
                         )
-                        OutlinedTextField(
-                            value = character.country?.name ?: "Sin país",
-                            onValueChange = {},
-                            label = { Text("País") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            enabled = false
-                        )
+
+                        // País: dropdown en edición, texto estático en vista
+                        if (isEditing) {
+                            ExposedDropdownMenuBox(
+                                expanded = countryExpanded,
+                                onExpandedChange = { countryExpanded = it },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                OutlinedTextField(
+                                    value = selectedCountry?.name ?: "Sin país",
+                                    onValueChange = {},
+                                    readOnly = true,
+                                    label = { Text("País") },
+                                    trailingIcon = {
+                                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = countryExpanded)
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .menuAnchor(),
+                                    singleLine = true
+                                )
+
+                                ExposedDropdownMenu(
+                                    expanded = countryExpanded,
+                                    onDismissRequest = { countryExpanded = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text("Sin país") },
+                                        onClick = {
+                                            selectedCountry = null
+                                            countryExpanded = false
+                                        }
+                                    )
+                                    countries.forEach { country ->
+                                        DropdownMenuItem(
+                                            text = { Text(country.name) },
+                                            onClick = {
+                                                selectedCountry = country
+                                                countryExpanded = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            OutlinedTextField(
+                                value = selectedCountry?.name ?: "Sin país",
+                                onValueChange = {},
+                                label = { Text("País") },
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                enabled = false
+                            )
+                        }
                     }
 
                     OutlinedTextField(
@@ -165,6 +221,7 @@ fun CharacterDetailScreen(
                                 firstName = firstName,
                                 lastName = lastName,
                                 age = age.toIntOrNull(),
+                                country = selectedCountry,
                                 occupation = occupation.ifBlank { null },
                                 description = description.ifBlank { null }
                             )

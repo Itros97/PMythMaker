@@ -2,6 +2,7 @@ package org.softwareanvil.data.repositories.character
 
 import org.softwareanvil.db.Characters
 import org.softwareanvil.db.SelectByCountryName
+import org.softwareanvil.db.SelectById
 import org.softwareanvil.domain.models.Character
 import org.softwareanvil.domain.models.Country
 
@@ -12,6 +13,26 @@ fun Characters.toDomain(): Character =
         lastName = last_name,
         age = age?.toInt(),
         country = null,
+        occupation = occupation,
+        description = description,
+        createdAt = created_at
+    )
+
+fun SelectById.toDomain(): Character =
+    Character(
+        id = id,
+        firstName = first_name,
+        lastName = last_name,
+        age = age?.toInt(),
+        country = country_db_id?.let { countryId ->
+            Country(
+                id = countryId,
+                name = country_name ?: "",
+                description = null,
+                foundationYear = null,
+                motto = null
+            )
+        },
         occupation = occupation,
         description = description,
         createdAt = created_at

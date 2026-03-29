@@ -26,16 +26,20 @@ FROM characters;
 
 selectById:
 SELECT
-    id,
-    first_name,
-    last_name,
-    age,
-    country_id,
-    occupation,
-    description,
-    created_at
+    characters.id,
+    characters.first_name,
+    characters.last_name,
+    characters.age,
+    characters.country_id,
+    characters.occupation,
+    characters.description,
+    characters.created_at,
+    countries.id AS country_db_id,
+    countries.name AS country_name,
+    countries.foundation_year AS country_foundation_year
 FROM characters
-WHERE id = ?;
+LEFT JOIN countries ON characters.country_id = countries.id
+WHERE characters.id = ?;
 
 selectByCountryName:
 SELECT

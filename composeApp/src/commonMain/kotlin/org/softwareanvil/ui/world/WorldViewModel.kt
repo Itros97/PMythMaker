@@ -128,9 +128,12 @@ class WorldViewModel(
         _generatedCharacter.value = null
     }
 
-    fun selectCharacter(character: Character) {
-        _selectedCharacter.value = character
-    }
+    // TODO: This is a workaround to avoid the issue of the character not having the country loaded when selected from the list.
+    //  The proper solution would be to load the country when loading the characters, but that would require changing the database queries and mapping,
+    //  which is out of scope for now.
+//    fun selectCharacter(character: Character) {
+//        _selectedCharacter.value = character
+//    }
 
     fun clearSelectedCharacter() {
         _selectedCharacter.value = null
@@ -148,6 +151,11 @@ class WorldViewModel(
 
     fun updateGeneratedCharacterCountry(country: Country?) {
         _generatedCharacter.value = _generatedCharacter.value?.copy(country = country)
+    }
+
+    fun selectCharacter(character: Character) {
+        val fullCharacter = generateWorldUseCase.getCharacterById(character.id)
+        _selectedCharacter.value = fullCharacter ?: character
     }
 
 

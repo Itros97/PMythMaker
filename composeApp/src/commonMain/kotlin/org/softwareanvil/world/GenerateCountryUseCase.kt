@@ -66,4 +66,9 @@ class GenerateWorldUseCase(
         characterRepository.updateById(character.id, character)
     }
 
+    // This method is used in the CountryDetailScreen to get the characters with the country details
+    fun getCharacterById(id: Long): Character? {
+        return characterRepository.selectById(id)
+    }
+
 }
